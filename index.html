@@ -588,6 +588,8 @@
         <li>If you are in crisis please contact a licensed mental health professional before continuing</li>
       </ul>
 
+      <p style="font-size:0.82rem;color:var(--g400);margin-bottom:1.25rem;line-height:1.6;"><em>Please note: this assessment does not save progress. If you close your browser you will need to start over. We recommend completing it in one sitting — it takes approximately 10–15 minutes.</em></p>
+
       <p class="closing-italic">The goal of HART is to give language to the things you have always felt but never been able to make sense of.</p>
 
       <div class="divider"></div>
@@ -602,7 +604,13 @@
         <div class="agree-text">I understand that this is <strong>not a clinical diagnosis or therapy</strong> and does not replace professional medical or mental health advice.</div>
       </div>
 
-      <button class="btn btn-primary btn-full" id="btn-start" disabled onclick="goTo('s-demographics')">
+      <div class="form-group" style="margin-bottom:1rem;margin-top:0.25rem">
+        <label class="form-label" for="intro-email">Enter your email to begin and receive your results.</label>
+        <input type="email" id="intro-email" placeholder="you@example.com" oninput="checkStartReady()" autocomplete="email">
+        <div id="intro-email-warn" class="warn-msg">Please enter a valid email address.</div>
+      </div>
+
+      <button class="btn btn-primary btn-full" id="btn-start" disabled onclick="startAssessment()">
         Begin Assessment &rarr;
       </button>
     </div>
@@ -736,17 +744,6 @@
         <label class="form-label">What is one thing you wish someone understood about your body, your stress, or your story right now? <span class="opt">(optional)</span></label>
         <textarea id="r-context" placeholder="Take your time. There are no right answers here…" style="min-height:160px"></textarea>
       </div>
-    </div>
-
-    <div class="card">
-      <h2>Receive Your Results</h2>
-      <p>We will send your results and a personalized summary to this address. Your results will also be shared with Conner Custodio for coaching context.</p>
-
-      <div class="form-group" style="margin-bottom:0">
-        <label class="form-label">Email Address <span class="opt">(required)</span></label>
-        <input type="email" id="r-email" placeholder="you@example.com">
-      </div>
-      <div id="email-warn" class="warn-msg">Please enter a valid email address.</div>
 
       <div class="btn-row">
         <button class="btn btn-ghost" onclick="goTo('s-section-6')">← Back</button>
@@ -1286,10 +1283,25 @@ function goTo(screenId) {
 function toggleAgree(key) {
   state.agrees[key] = !state.agrees[key];
   const row = document.getElementById(`row-${key}`);
-  const chk = document.getElementById(`chk-${key}`);
   row.classList.toggle('checked', state.agrees[key]);
-  const btn = document.getElementById('btn-start');
-  btn.disabled = !(state.agrees.age && state.agrees.disc);
+  checkStartReady();
+}
+
+function checkStartReady() {
+  const email = document.getElementById('intro-email').value.trim();
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  document.getElementById('btn-start').disabled = !(state.agrees.age && state.agrees.disc && emailOk);
+}
+
+function startAssessment() {
+  const email = document.getElementById('intro-email').value.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    document.getElementById('intro-email-warn').classList.add('visible');
+    return;
+  }
+  document.getElementById('intro-email-warn').classList.remove('visible');
+  state.email = email;
+  goTo('s-demographics');
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1346,16 +1358,6 @@ function submitSection(si, nextId) {
    REFLECTION & SUBMIT
    ═══════════════════════════════════════════════════════════════ */
 function submitAssessment() {
-  const email = document.getElementById('r-email').value.trim();
-  const warn  = document.getElementById('email-warn');
-
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    warn.classList.add('visible');
-    return;
-  }
-  warn.classList.remove('visible');
-
-  state.email = email;
   state.reflection = {
     context: document.getElementById('r-context').value.trim(),
   };
@@ -1365,10 +1367,39 @@ function submitAssessment() {
   goTo('s-results');
 
   // Fire-and-forget — don't block the results page
+  const email = state.email;
   Promise.all([
+    submitFormspree(email, scores),
     subscribeMailchimp(email, scores),
     notifyCoach(email, scores),
-  ]).catch(() => {}); // silently fail if not configured
+  ]).catch(() => {});
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FORMSPREE SUBMISSION
+   ═══════════════════════════════════════════════════════════════ */
+function submitFormspree(email, { storyScore, strainScore, sectionScores }) {
+  return fetch('https://formspree.io/f/xpqogvon', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      email,
+      age_range:                  state.demographics.age    || '',
+      biological_sex:             state.demographics.sex    || '',
+      symptoms:                   state.symptoms.join(', ') || 'None selected',
+      enneagram:                  state.enneagram           || 'Not provided',
+      story_impact_score:         storyScore  + '%',
+      current_strain_score:       strainScore + '%',
+      physical_load_score:        sectionScores[0] + '%',
+      nutrition_score:            sectionScores[1] + '%',
+      nervous_system_score:       sectionScores[2] + '%',
+      story_identity_score:       sectionScores[3] + '%',
+      recovery_rhythm_score:      sectionScores[4] + '%',
+      relational_environment_score: sectionScores[5] + '%',
+      body_boundaries_score:      sectionScores[6] + '%',
+      final_reflection:           state.reflection.context  || '',
+    }),
+  });
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1625,12 +1656,12 @@ function retake() {
 
   // Reset UI
   document.getElementById('btn-start').disabled = true;
+  document.getElementById('intro-email').value = '';
   document.querySelectorAll('.agree-row').forEach(r => r.classList.remove('checked'));
   document.querySelectorAll('.cb-item').forEach(c => c.classList.remove('checked'));
   document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
   document.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
   document.querySelectorAll('textarea').forEach(t => t.value = '');
-  document.getElementById('r-email').value = '';
   document.querySelectorAll('.q-block').forEach(b => b.classList.remove('unanswered'));
   document.querySelectorAll('.warn-msg').forEach(w => w.classList.remove('visible'));
 
