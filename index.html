@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HART Assessment — Holistic Awareness &amp; Regulation Test</title>
+  <!-- EmailJS for coach notifications — configure below in CONFIG -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple:       #4DBFB8;
+      --purple-light: #5DCFC8;
+      --purple-dark:  #2A8A9E;
+      --purple-faint: #DCF2F0;
+      --green:  #22C55E;
+      --yellow: #F59E0B;
+      --red:    #EF4444;
+      --g50:  #FAFCFC;
+      --g100: #EDF7F6;
+      --g200: #C5E4E2;
+      --g300: #9DCECE;
+      --g400: #6BA8A8;
+      --g600: #325F60;
+      --g800: #1A2E35;
+      --g900: #0F1F24;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: var(--g50);
+      color: var(--g800);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── Screens ── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ── Layout ── */
+    .page-wrap {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 1.25rem 3rem;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: #FAFCFC;
+      border-bottom: 1px solid var(--g200);
+      padding: 0.875rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo { font-size: 1.15rem; font-weight: 800; color: var(--purple); letter-spacing: -0.02em; }
+    .logo span { color: var(--g400); font-weight: 400; font-size: 0.85rem; margin-left: 0.35rem; }
+    .step-label { font-size: 0.8rem; color: var(--g400); font-weight: 500; }
+
+    /* ── Progress ── */
+    .progress-wrap { margin: 1.5rem 0 0.5rem; }
+    .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+    .progress-title { font-size: 0.75rem; font-weight: 600; color: var(--purple); text-transform: uppercase; letter-spacing: 0.06em; }
+    .progress-pct   { font-size: 0.75rem; color: var(--g400); }
+    .progress-track { background: var(--g200); height: 5px; border-radius: 3px; overflow: hidden; }
+    .progress-bar   { background: var(--purple); height: 100%; border-radius: 3px; transition: width 0.4s ease; }
+
+    /* ── Cards ── */
+    .card {
+      background: #EDF7F6;
+      border-radius: 16px;
+      padding: 1.75rem;
+      box-shadow: 0 2px 8px rgba(42,138,158,0.08), 0 0 0 1px rgba(77,191,184,0.12);
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── Typography ── */
+    h1 { font-size: 1.9rem; font-weight: 800; color: var(--g900); line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 0.6rem; }
+    h2 { font-size: 1.4rem; font-weight: 700; color: var(--purple-dark); margin-bottom: 0.5rem; }
+    h3 { font-size: 1.05rem; font-weight: 600; color: var(--purple-dark); margin-bottom: 0.25rem; }
+    p  { color: var(--g600); margin-bottom: 0.85rem; font-size: 0.95rem; }
+    p:last-child { margin-bottom: 0; }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--purple-faint);
+      color: var(--purple);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.7rem 1.75rem;
+      border-radius: 100px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.18s, box-shadow 0.18s, transform 0.1s;
+      text-decoration: none;
+      font-family: inherit;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--purple); color: white; box-shadow: 0 2px 8px rgba(77,191,184,0.35); }
+    .btn-primary:hover:not(:disabled) { background: var(--purple-light); box-shadow: 0 4px 14px rgba(77,191,184,0.45); }
+    .btn-primary:disabled { background: var(--g300); cursor: not-allowed; color: white; box-shadow: none; }
+    .btn-ghost { background: white; color: var(--purple-dark); border: 1.5px solid var(--g200); }
+    .btn-ghost:hover { border-color: var(--purple); background: var(--purple-faint); color: var(--purple); }
+    .btn-full { width: 100%; }
+    .btn-row { display: flex; gap: 0.75rem; justify-content: space-between; align-items: center; margin-top: 1.75rem; }
+
+    /* ── Agree / Check rows ── */
+    .agree-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.875rem 1rem;
+      border: 1.5px solid var(--g200);
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 0.75rem;
+      background: white;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      user-select: none;
+      box-shadow: 0 1px 3px rgba(42,138,158,0.06);
+    }
+    .agree-row:hover { border-color: var(--purple); background: var(--purple-faint); }
+    .agree-row.checked { border-color: var(--purple); background: var(--purple-faint); box-shadow: 0 0 0 3px rgba(77,191,184,0.15); }
+    .agree-row input[type=checkbox] { display: none; }
+    .agree-check {
+      width: 18px; height: 18px; min-width: 18px;
+      border-radius: 5px;
+      border: 2px solid var(--g300);
+      margin-top: 0.1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .agree-row.checked .agree-check { background: var(--purple); border-color: var(--purple); }
+    .agree-row.checked .agree-check::after {
+      content: '';
+      display: block;
+      width: 9px; height: 9px;
+      background: white;
+      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    }
+    .agree-text { font-size: 0.88rem; color: var(--g800); line-height: 1.5; padding-top: 0.05rem; }
+
+    /* ── Before list & closing italic ── */
+    .before-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .before-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.88rem;
+      color: var(--g600);
+      line-height: 1.5;
+    }
+    .before-list li::before {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 6px;
+      min-width: 6px;
+      border-radius: 50%;
+      background: var(--purple);
+      margin-top: 0.45rem;
+    }
+    .closing-italic {
+      font-style: italic;
+      color: var(--purple-dark);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 0;
+      border-left: 3px solid var(--purple);
+      padding-left: 0.875rem;
+    }
+
+    /* ── Disclaimer box ── */
+    .disclaimer-box {
+      background: var(--g100);
+      border-radius: 9px;
+      padding: 1.1rem 1.25rem;
+      font-size: 0.84rem;
+      color: var(--g600);
+      line-height: 1.75;
+      margin-bottom: 1.25rem;
+    }
+    .disclaimer-box p { font-size: 0.84rem; margin-bottom: 0.5rem; }
+    .disclaimer-box p:last-child { margin-bottom: 0; }
+
+    /* ── Form fields ── */
+    .form-group { margin-bottom: 1.5rem; }
+    .form-label {
+      display: block;
+      font-weight: 600;
+      color: var(--g800);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    .form-label .opt { font-weight: 400; color: var(--g400); margin-left: 0.35rem; font-size: 0.8rem; }
+    select, input[type=email], input[type=text], textarea {
+      width: 100%;
+      padding: 0.6rem 0.875rem;
+      border: 1.5px solid var(--g200);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: var(--g800);
+      background: white;
+      font-family: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239CA3AF' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.875rem center;
+      padding-right: 2.5rem;
+    }
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(77,191,184,0.18);
+    }
+    textarea { min-height: 130px; resize: vertical; }
+
+    /* ── Checkbox grid (symptoms) ── */
+    .cb-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 0.5rem;
+    }
+    .cb-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border: 1.5px solid var(--g200);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--g800);
+      background: white;
+      user-select: none;
+      transition: all 0.15s;
+      box-shadow: 0 1px 2px rgba(42,138,158,0.05);
+    }
+    .cb-item:hover { border-color: var(--purple); background: var(--purple-faint); }
+    .cb-item.checked { border-color: var(--purple); background: var(--purple-faint); }
+    .cb-item input { display: none; }
+    .cb-dot {
+      width: 15px; height: 15px; min-width: 15px;
+      border-radius: 4px;
+      border: 2px solid var(--g300);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .cb-item.checked .cb-dot { background: var(--purple); border-color: var(--purple); }
+    .cb-item.checked .cb-dot::after {
+      content: '';
+      display: block;
+      width: 7px; height: 7px;
+      background: white;
+      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    }
+
+    /* ── Enneagram grid ── */
+    .enn-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.45rem; }
+    .enn-opt {
+      display: flex; align-items: center; justify-content: center;
+      padding: 0.6rem 0.4rem;
+      border: 1.5px solid var(--g200);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--g600);
+      user-select: none;
+      transition: all 0.15s;
+    }
+    .enn-opt:hover { border-color: var(--purple); background: var(--purple-faint); color: var(--purple); }
+    .enn-opt.selected { background: var(--purple); border-color: var(--purple); color: white; }
+    .enn-opt input { display: none; }
+
+    /* ── Question blocks ── */
+    .q-block {
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--g200);
+    }
+    .q-block:last-of-type { border-bottom: none; padding-bottom: 0; }
+    .q-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .q-num  { font-size: 0.7rem; font-weight: 700; color: var(--g400); }
+    .q-text { font-size: 0.95rem; font-weight: 500; color: var(--g800); line-height: 1.5; margin-bottom: 1rem; }
+
+    .scale-row {
+      display: flex;
+      gap: 0.4rem;
+    }
+    .scale-opt {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      cursor: pointer;
+    }
+    .scale-opt input[type=radio] { display: none; }
+    .scale-circle {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 2px solid #A8DDD9;
+      background: white;
+      transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 1px 3px rgba(42,138,158,0.08);
+    }
+    .scale-opt:hover .scale-circle { border-color: var(--purple); background: var(--purple-faint); box-shadow: 0 2px 6px rgba(77,191,184,0.25); }
+    .scale-opt input:checked ~ .scale-circle {
+      background: var(--purple);
+      border-color: var(--purple);
+      box-shadow: 0 2px 8px rgba(77,191,184,0.45);
+    }
+    .scale-opt input:checked ~ .scale-circle::after {
+      content: '';
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: white;
+    }
+    .scale-lbl { font-size: 0.62rem; color: var(--g400); text-align: center; line-height: 1.25; }
+    .scale-opt input:checked ~ .scale-lbl { color: var(--purple-dark); font-weight: 700; }
+
+    /* ── Error / warning ── */
+    .warn-msg {
+      display: none;
+      color: var(--red);
+      font-size: 0.82rem;
+      margin-top: 0.75rem;
+      font-weight: 500;
+    }
+    .warn-msg.visible { display: block; }
+    .q-block.unanswered .scale-circle { border-color: #FCA5A5; }
+
+    /* ── Disclaimer hero ── */
+    .hart-hero {
+      text-align: center;
+      padding: 2.5rem 0 1.5rem;
+    }
+    .hart-wordmark {
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--purple);
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .hart-full { font-size: 0.95rem; color: var(--g400); margin-top: 0.25rem; }
+    .hart-author { font-size: 0.8rem; color: var(--g400); margin-top: 0.1rem; }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+    .intro-tile {
+      background: var(--purple-faint);
+      border: 1px solid rgba(42,138,158,0.15);
+      border-radius: 10px;
+      padding: 1rem 0.875rem;
+    }
+    .intro-tile .icon { font-size: 1.4rem; margin-bottom: 0.4rem; }
+    .intro-tile h4 { font-size: 0.82rem; font-weight: 700; color: var(--purple); margin-bottom: 0.2rem; }
+    .intro-tile p  { font-size: 0.78rem; color: var(--g600); margin: 0; }
+
+    /* ── Results ── */
+    .results-hero {
+      background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple) 60%, var(--purple-light) 100%);
+      border-radius: 14px;
+      padding: 1.75rem;
+      color: white;
+      margin-bottom: 1.25rem;
+      text-align: center;
+    }
+    .results-hero h2 { color: white; margin-bottom: 0.25rem; font-size: 1.5rem; }
+    .results-hero p  { color: rgba(255,255,255,0.75); font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .score-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .score-box {
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 1.1rem;
+    }
+    .score-val  { font-size: 2.75rem; font-weight: 900; line-height: 1; margin-bottom: 0.2rem; letter-spacing: -0.03em; }
+    .score-name { font-size: 0.72rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.3; }
+    .score-sub  { font-size: 0.75rem; opacity: 0.65; margin-top: 0.1rem; }
+
+    .section-result {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.875rem;
+      padding: 1rem 1.1rem;
+      border-radius: 10px;
+      background: white;
+      border: 1px solid var(--g200);
+      border-top: 3px solid var(--purple);
+      margin-bottom: 0.6rem;
+      box-shadow: 0 1px 4px rgba(42,138,158,0.06);
+    }
+    .dot-wrap { padding-top: 0.15rem; }
+    .dot {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot.green  { background: var(--green); }
+    .dot.yellow { background: var(--yellow); }
+    .dot.red    { background: var(--red); }
+    .sr-body { flex: 1; }
+    .sr-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.35rem; }
+    .sr-name { font-size: 0.9rem; font-weight: 700; color: var(--purple-dark); }
+    .sr-pct  { font-size: 0.8rem; font-weight: 700; }
+    .sr-pct.green  { color: var(--green); }
+    .sr-pct.yellow { color: var(--yellow); }
+    .sr-pct.red    { color: var(--red); }
+    .sr-bar { background: var(--g200); height: 5px; border-radius: 3px; overflow: hidden; margin-bottom: 0.5rem; }
+    .sr-fill { height: 100%; border-radius: 3px; transition: width 0.9s cubic-bezier(0.4,0,0.2,1); }
+    .sr-fill.green  { background: var(--green); }
+    .sr-fill.yellow { background: var(--yellow); }
+    .sr-fill.red    { background: var(--red); }
+    .sr-desc { font-size: 0.8rem; color: var(--g600); line-height: 1.6; }
+
+    .results-legend { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: var(--g600); }
+
+    /* ── Resources ── */
+    .resource-group { margin-bottom: 1.5rem; }
+    .resource-group:last-child { margin-bottom: 0; }
+    .resource-group-head {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--g200);
+    }
+    .resource-group-name { font-size: 0.82rem; font-weight: 700; color: var(--g800); }
+    .resource-items { display: flex; flex-direction: column; gap: 0.45rem; }
+    .resource-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      padding: 0.6rem 0.75rem;
+      background: white;
+      border: 1px solid var(--g200);
+      border-radius: 8px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      box-shadow: 0 1px 3px rgba(42,138,158,0.05);
+    }
+    .resource-item:hover { border-color: var(--purple); }
+    .rtype {
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 0.18rem 0.5rem;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+    .rtype-book    { background: var(--purple-faint); color: var(--purple); }
+    .rtype-podcast { background: #FEF3C7; color: #92400E; }
+    .rtype-youtube { background: #FEE2E2; color: #991B1B; }
+    .rtype-website { background: #E0F7F6; color: var(--purple-dark); }
+    .rinfo { flex: 1; min-width: 0; }
+    .rinfo-title  { font-size: 0.87rem; font-weight: 600; color: var(--g800); line-height: 1.35; }
+    .rinfo-author { font-size: 0.76rem; color: var(--g400); margin-top: 0.1rem; }
+    .rinfo-link   { margin-top: 0.25rem; }
+    .rinfo-link a {
+      font-size: 0.75rem;
+      color: var(--purple-dark);
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .rinfo-link a:hover { text-decoration: underline; }
+    .resources-empty {
+      text-align: center;
+      padding: 1.5rem 0 0.5rem;
+      color: var(--g400);
+      font-size: 0.85rem;
+    }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      background: var(--g900);
+      color: white;
+      padding: 0.75rem 1.4rem;
+      border-radius: 9px;
+      font-size: 0.88rem;
+      z-index: 999;
+      transition: transform 0.28s ease;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── Footer ── */
+    .page-footer {
+      text-align: center;
+      padding: 1.75rem 1rem 0.5rem;
+      font-size: 0.78rem;
+      color: var(--g400);
+    }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: var(--g100); margin: 1.25rem 0; }
+
+    /* ── Responsive ── */
+    @media (max-width: 560px) {
+      h1 { font-size: 1.5rem; }
+      .scale-row { gap: 0.25rem; }
+      .scale-circle { width: 28px; height: 28px; }
+      .scale-lbl { font-size: 0.55rem; }
+      .score-pair { grid-template-columns: 1fr; }
+      .enn-grid { grid-template-columns: repeat(5, 1fr); }
+      .intro-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: DISCLAIMER
+════════════════════════════════════════════ -->
+<div class="screen active" id="s-disclaimer">
+  <div class="page-wrap">
+    <div class="hart-hero">
+      <div class="hart-wordmark">HART Assessment</div>
+      <div class="hart-full">Holistic Awareness &amp; Regulation Test</div>
+      <div class="hart-author">by Conner Custodio</div>
+    </div>
+
+    <div class="card">
+      <p>Many people carry symptoms — chronic fatigue, autoimmune conditions, anxiety, addiction, or simply a sense that something is off — without ever understanding why. The HART Assessment helps connect those dots.</p>
+      <p>This assessment was designed to give language to the things you have always felt but never been able to make sense of.</p>
+      <p>You will move through 7 areas of your life including physical load, nutrition, nervous system regulation, your formative story, lifestyle rhythms, relational environment, and body history.</p>
+      <p style="margin-bottom:0"><strong>There are no right or wrong answers. Answer as honestly as you can.</strong></p>
+    </div>
+
+    <div class="card">
+      <h2>Before You Begin</h2>
+      <ul class="before-list">
+        <li>You must be 18 or older to continue</li>
+        <li>Some questions address sensitive topics including childhood experiences and sexual history</li>
+        <li>This is not a medical diagnosis or therapy — it is a structured coaching and research instrument</li>
+        <li>Your responses are private and used only for coaching and anonymous research purposes</li>
+        <li>If you are in crisis please contact a licensed mental health professional before continuing</li>
+      </ul>
+
+      <p class="closing-italic">The goal of HART is to give language to the things you have always felt but never been able to make sense of.</p>
+
+      <div class="divider"></div>
+
+      <div class="agree-row" id="row-age" onclick="toggleAgree('age')">
+        <div class="agree-check" id="chk-age"></div>
+        <div class="agree-text">I confirm that I am <strong>18 years of age or older</strong> and consent to taking this assessment.</div>
+      </div>
+
+      <div class="agree-row" id="row-disc" onclick="toggleAgree('disc')">
+        <div class="agree-check" id="chk-disc"></div>
+        <div class="agree-text">I understand that this is <strong>not a clinical diagnosis or therapy</strong> and does not replace professional medical or mental health advice.</div>
+      </div>
+
+      <button class="btn btn-primary btn-full" id="btn-start" disabled onclick="goTo('s-demographics')">
+        Begin Assessment &rarr;
+      </button>
+    </div>
+
+    <div class="page-footer">&copy; 2025 Conner Custodio. All rights reserved.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: DEMOGRAPHICS
+════════════════════════════════════════════ -->
+<div class="screen" id="s-demographics">
+  <div class="site-header">
+    <div class="logo">HART <span>Assessment</span></div>
+    <div class="step-label">About You</div>
+  </div>
+  <div class="page-wrap">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <div class="progress-title">Getting Started</div>
+        <div class="progress-pct">1 of 9</div>
+      </div>
+      <div class="progress-track"><div class="progress-bar" style="width:11%"></div></div>
+    </div>
+
+    <div class="card">
+      <div class="section-badge">Demographics</div>
+      <h2>A Little About You</h2>
+      <p>This context helps interpret your results. All fields are optional except where noted.</p>
+      <div class="divider"></div>
+
+      <div class="form-group">
+        <label class="form-label">Age Range <span class="opt">(required)</span></label>
+        <select id="d-age">
+          <option value="">Select your age range…</option>
+          <option>18–24</option>
+          <option>25–34</option>
+          <option>35–44</option>
+          <option>45–54</option>
+          <option>55–64</option>
+          <option>65+</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Biological Sex <span class="opt">(required)</span></label>
+        <select id="d-sex">
+          <option value="">Select…</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Intersex</option>
+          <option>Prefer not to say</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Current Symptoms <span class="opt">(select all that apply)</span></label>
+        <div class="cb-grid" id="symptoms-grid">
+          <!-- generated by JS -->
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Reason for Taking This Assessment <span class="opt">(required)</span></label>
+        <select id="d-reason">
+          <option value="">Select…</option>
+          <option>Personal curiosity</option>
+          <option>Working with a coach</option>
+          <option>Health concerns</option>
+          <option>Referred by someone</option>
+          <option>Research participation</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Enneagram Number <span class="opt">(optional)</span></label>
+        <select id="d-enn">
+          <option value="">I don't know my type</option>
+          <option value="1">Type 1 — The Reformer</option>
+          <option value="2">Type 2 — The Helper</option>
+          <option value="3">Type 3 — The Achiever</option>
+          <option value="4">Type 4 — The Individualist</option>
+          <option value="5">Type 5 — The Investigator</option>
+          <option value="6">Type 6 — The Loyalist</option>
+          <option value="7">Type 7 — The Enthusiast</option>
+          <option value="8">Type 8 — The Challenger</option>
+          <option value="9">Type 9 — The Peacemaker</option>
+        </select>
+      </div>
+
+      <div id="demo-warn" class="warn-msg">Please complete the required fields before continuing.</div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="goTo('s-disclaimer')">← Back</button>
+        <button class="btn btn-primary" onclick="submitDemographics()">Continue →</button>
+      </div>
+    </div>
+    <div class="page-footer">&copy; 2025 Conner Custodio. All rights reserved.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREENS: SECTIONS 0–6 (generated by JS)
+════════════════════════════════════════════ -->
+<div id="section-screens-container"></div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: REFLECTION & EMAIL
+════════════════════════════════════════════ -->
+<div class="screen" id="s-reflection">
+  <div class="site-header">
+    <div class="logo">HART <span>Assessment</span></div>
+    <div class="step-label">Final Reflection</div>
+  </div>
+  <div class="page-wrap">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <div class="progress-title">Almost Done</div>
+        <div class="progress-pct">9 of 9</div>
+      </div>
+      <div class="progress-track"><div class="progress-bar" style="width:100%"></div></div>
+    </div>
+
+    <div class="card">
+      <div class="section-badge">Reflection</div>
+      <h2>One Last Question</h2>
+      <p>Before we generate your results, take a moment to reflect honestly.</p>
+      <div class="divider"></div>
+
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">What is one thing you wish someone understood about your body, your stress, or your story right now? <span class="opt">(optional)</span></label>
+        <textarea id="r-context" placeholder="Take your time. There are no right answers here…" style="min-height:160px"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Receive Your Results</h2>
+      <p>We will send your results and a personalized summary to this address. Your results will also be shared with Conner Custodio for coaching context.</p>
+
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Email Address <span class="opt">(required)</span></label>
+        <input type="email" id="r-email" placeholder="you@example.com">
+      </div>
+      <div id="email-warn" class="warn-msg">Please enter a valid email address.</div>
+
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="goTo('s-section-6')">← Back</button>
+        <button class="btn btn-primary" id="btn-submit" onclick="submitAssessment()">View My Results →</button>
+      </div>
+    </div>
+    <div class="page-footer">&copy; 2025 Conner Custodio. All rights reserved.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: RESULTS
+════════════════════════════════════════════ -->
+<div class="screen" id="s-results">
+  <div class="site-header">
+    <div class="logo">HART <span>Results</span></div>
+  </div>
+  <div class="page-wrap">
+    <div style="padding-top:1.5rem"></div>
+    <div class="results-hero" id="results-hero">
+      <h2>Your HART Results</h2>
+      <p>Based on your responses across 7 domains</p>
+      <div class="score-pair">
+        <div class="score-box">
+          <div class="score-val" id="r-story-score">—</div>
+          <div class="score-name">Story Impact Score</div>
+          <div class="score-sub">Narrative &amp; Identity</div>
+        </div>
+        <div class="score-box">
+          <div class="score-val" id="r-strain-score">—</div>
+          <div class="score-name">Current Strain Score</div>
+          <div class="score-sub">Functional Load</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="results-legend">
+        <div class="legend-item"><div class="dot green"></div> Low Strain (0–40%)</div>
+        <div class="legend-item"><div class="dot yellow"></div> Moderate Strain (41–65%)</div>
+        <div class="legend-item"><div class="dot red"></div> High Strain (66–100%)</div>
+      </div>
+      <div id="section-results-list">
+        <!-- generated by JS -->
+      </div>
+    </div>
+
+    <!-- Resources: shown only for yellow/red sections -->
+    <div class="card" id="resources-card" style="display:none">
+      <h2>Recommended Resources</h2>
+      <p>Based on where you're carrying the most strain, these resources may offer meaningful support.</p>
+      <div class="divider"></div>
+      <div id="resources-list"></div>
+    </div>
+
+    <div class="card">
+      <h2>Understanding Your Scores</h2>
+      <p><strong>Story Impact Score</strong> reflects how much your narrative history — past wounds, identity patterns, and unresolved stories — is showing up in your present experience. A higher score doesn't mean you're broken; it means this is likely where meaningful change begins.</p>
+      <p><strong>Current Strain Score</strong> is an aggregate of your functional load across the six physical and relational domains. Think of it as a snapshot of how much your system is currently being asked to carry.</p>
+      <p style="margin-bottom:0">These results are a starting point for awareness, not a verdict. If you'd like to explore what they mean for you personally, reach out to Conner Custodio at <a href="mailto:info@connercustodio.com" style="color:var(--purple)">info@connercustodio.com</a>.</p>
+    </div>
+
+    <div class="card" style="text-align:center;">
+      <h3>What's Next?</h3>
+      <p>Your results have been sent to your email, and Conner has been notified. You can also retake the assessment at any time to track changes over time.</p>
+      <button class="btn btn-primary" onclick="retake()">Retake Assessment</button>
+    </div>
+
+    <div class="page-footer">&copy; 2025 Conner Custodio. All rights reserved.</div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   CONFIGURATION — replace placeholders before deploying
+   ═══════════════════════════════════════════════════════════════
+   MAILCHIMP:
+     1. Log in to Mailchimp → Audience → Signup forms → Embedded forms
+     2. Copy the form action URL, e.g.:
+        https://yoursubdomain.us1.list-manage.com/subscribe/post?u=XXXXXX&id=518185035a
+     3. Paste it below (keep it as-is; the script converts it to JSONP automatically)
+
+   EMAILJS (coach notifications):
+     1. Sign up at https://emailjs.com
+     2. Add an email service (Gmail, Outlook, etc.)
+     3. Create a template with variables: {{to_email}}, {{subject}}, {{message}}
+     4. Fill in serviceId, templateId, and publicKey below
+   ═══════════════════════════════════════════════════════════════ */
+const CONFIG = {
+  mailchimpFormUrl: 'https://connercustodio.us9.list-manage.com/subscribe/post?u=974b6b718573db3463aeb6157&id=518185035a&f_id=0010d4e3f0',
+  emailjsServiceId:  'YOUR_EMAILJS_SERVICE_ID',
+  emailjsTemplateId: 'YOUR_EMAILJS_TEMPLATE_ID',
+  emailjsPublicKey:  'YOUR_EMAILJS_PUBLIC_KEY',
+  coachEmail:        'info@connercustodio.com',
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   ASSESSMENT DATA
+   ═══════════════════════════════════════════════════════════════ */
+const SYMPTOMS = [
+  'Autoimmune condition',
+  'Chronic fatigue',
+  'Anxiety or depression',
+  'Addiction or compulsive behavior',
+  'Pornography use concerns',
+  'Disordered eating',
+  'Chronic pain',
+  'Sleep issues',
+  'None of the above',
+];
+
+// scale: 4 = Rarely / Sometimes / Often / Almost Always (default)
+//        5 = Never / Rarely / Sometimes / Often / Almost Always
+// labels: custom array of option labels (overrides scale default)
+// reverse: true = positive question (higher index = lower strain)
+const SECTIONS = [
+  {
+    id: 'physical',
+    title: 'Physical Load, Fatigue & Sleep',
+    icon: '🌙',
+    questions: [
+      { q: 'How often do you feel physically exhausted by midday?',                                                                       scale: 4, reverse: false },
+      { q: 'How often do you push through and keep going even when your body feels like it needs rest?',                                  scale: 4, reverse: false },
+      { q: 'How many full days of rest do you take each week?',                                                                           labels: ['0', '1', '2', '3+'], reverse: true  },
+      { q: 'How do you typically feel when you wake up in the morning?',                                                                  labels: ['Rested', 'Neutral', 'Tired', 'Exhausted'], reverse: false },
+      { q: 'Have you noticed a drop in your energy, motivation, or ability to keep up with daily life recently?',                        labels: ['Not at all', 'Slightly', 'Moderately', 'Significantly'], reverse: false },
+      { q: 'I take longer to bounce back from physical activity, illness, or stress than I used to.',                                     scale: 4, reverse: false },
+      { q: 'My body feels achy, sore, or inflamed more than seems normal.',                                                               scale: 4, reverse: false },
+      { q: 'I feel like my body never fully catches up on recovery.',                                                                     scale: 4, reverse: false },
+      { q: 'I get sick more often than I think I should.',                                                                                scale: 4, reverse: false },
+      { q: 'When I get sick, it takes me a long time to recover.',                                                                        scale: 4, reverse: false },
+      { q: 'I ignore pain or warning signals from my body until something forces me to stop.',                                            scale: 4, reverse: false },
+      { q: 'How many hours of sleep do you get on most nights?',                                                                          labels: ['Less than 5 hrs', '5–6 hrs', '6–7 hrs', '7–9 hrs'], reverse: true  },
+      { q: 'I wake up feeling like sleep did not restore me.',                                                                            scale: 4, reverse: false },
+      { q: 'It takes me a long time to fall asleep most nights.',                                                                         scale: 4, reverse: false },
+      { q: 'I wake up with dry mouth or struggle to breathe through my nose at night.',                                                   scale: 5, reverse: false },
+      { q: 'I wake up feeling tense, unrestored, or like I was fighting in my sleep.',                                                    scale: 5, reverse: false },
+    ],
+    research: {
+      green:  'Your physical recovery patterns appear healthy. Research shows consistent, quality sleep is one of the strongest predictors of emotional regulation, cognitive performance, and immune function (Walker, 2017).',
+      yellow: 'Moderate physical strain is present. Mild, chronic fatigue accumulates in the nervous system and can quietly reduce your window of tolerance for stress. Even incremental improvements to sleep hygiene often yield significant downstream benefits.',
+      red:    'High physical load and disrupted sleep are indicated. The research is clear: chronic sleep deprivation elevates cortisol, impairs memory consolidation, reduces immune response, and deepens dysregulation across every other domain measured here (Van Cauter et al., 2000).',
+    },
+  },
+  {
+    id: 'nutrition',
+    title: 'Nutrition, Fuel & Hydration',
+    icon: '🥦',
+    questions: [
+      { q: 'How many full meals do you typically eat per day?',                                                                           labels: ['1', '2', '3', '4+'], reverse: true  },
+      { q: 'Do you eat breakfast most days?',                                                                                             labels: ['Yes, every day', 'Most days', 'Sometimes', 'Rarely or never'], reverse: false },
+      { q: 'Overall, do you feel like you eat enough food to fuel your body through the day?',                                            labels: ['Yes, consistently', 'Most days', 'Some days', 'Rarely'], reverse: false },
+      { q: 'How consistently do you eat carbohydrates — bread, rice, fruit, potatoes, oats — as part of your meals?',                    labels: ['Every meal', 'Most meals', 'Occasionally', 'I try to avoid them'], reverse: false },
+      { q: 'How much water do you drink on a typical day?',                                                                               labels: ['Less than 60 oz', '60–90 oz', '90–120 oz', '120+ oz'], reverse: true  },
+      { q: 'How consistently do you eat protein as part of your meals?',                                                                  labels: ['Every meal', 'Most meals', 'Sometimes', 'Rarely'], reverse: false },
+      { q: 'I skip meals because I am too busy, stressed, or forget to eat.',                                                             scale: 4, reverse: false },
+      { q: 'Hours pass during the day and I realize I have not eaten anything substantial.',                                              scale: 4, reverse: false },
+      { q: 'I eat most of my food late in the day or at night.',                                                                          scale: 4, reverse: false },
+      { q: 'I rely on snacks or convenience foods rather than sitting down for a real meal.',                                             scale: 4, reverse: false },
+      { q: 'I try to avoid carbohydrates as much as possible.',                                                                           scale: 4, reverse: false },
+      { q: 'I feel foggy, irritable, or low-energy when I go several hours without eating.',                                             scale: 4, reverse: false },
+      { q: 'My mood, focus, and energy improve noticeably when I eat regular balanced meals.',                                            scale: 4, reverse: true  },
+      { q: 'I drink half my bodyweight in ounces of water daily.',                                                                        scale: 4, reverse: true  },
+      { q: 'I rely on caffeine to feel functional during the day.',                                                                       scale: 4, reverse: false },
+      { q: 'Caffeine makes me feel more anxious, jittery, or tense.',                                                                    scale: 4, reverse: false },
+      { q: 'I experience bloating, stomach discomfort, or digestive issues regularly.',                                                   scale: 4, reverse: false },
+      { q: 'My digestion gets noticeably worse when I am stressed or not sleeping well.',                                                 scale: 4, reverse: false },
+      { q: 'When I am stressed I either forget to eat entirely or I overeat.',                                                            scale: 4, reverse: false },
+      { q: 'I use food to manage anxiety, loneliness, boredom, or stress.',                                                               scale: 4, reverse: false },
+      { q: 'I swing between periods of eating very strictly and then overeating.',                                                        scale: 4, reverse: false },
+    ],
+    research: {
+      green:  'Your nutritional patterns support physiological stability. A consistent, whole-food-rich eating pattern is associated with lower levels of inflammatory markers, more stable cortisol rhythms, and improved mood regulation (Jacka et al., 2017).',
+      yellow: 'Some nutritional strain is present. Irregular eating, emotional eating, and reliance on stimulants are common signs that the body is compensating for underlying stress — rather than being fueled for it.',
+      red:    'Significant nutritional dysregulation is indicated. Poor dietary patterns have a bidirectional relationship with mental health; the gut-brain axis means that what you eat directly affects neurotransmitter production, inflammation, and stress resilience (Cryan et al., 2019).',
+    },
+  },
+  {
+    id: 'nervous',
+    title: 'Nervous System & Stress Response',
+    icon: '⚡',
+    questions: [
+      { q: 'How often do you feel keyed up, restless, or on edge for no clear reason?',                                                  labels: ['Rarely', 'Occasionally', 'Often', 'Daily'], reverse: false },
+      { q: 'How often do you struggle to wind down because your mind or body will not settle?',                                           scale: 4, reverse: false },
+      { q: 'Do you catch yourself clenching your jaw, holding your breath, or tensing your shoulders without realizing it?',             labels: ['Rarely', 'Sometimes', 'Often', 'Daily'], reverse: false },
+      { q: 'When you make a mistake or receive criticism, how intense is your internal reaction?',                                        labels: ['Mild', 'Moderate', 'Intense', 'Overwhelming'], reverse: false },
+      { q: 'I often feel exhausted but also too wired to rest.',                                                                          scale: 4, reverse: false },
+      { q: 'My mind races and I have difficulty slowing my thoughts down.',                                                               scale: 4, reverse: false },
+      { q: 'I struggle to truly relax even when nothing urgent is happening.',                                                            scale: 4, reverse: false },
+      { q: 'I startle easily or feel hyperaware of what is happening around me.',                                                         scale: 4, reverse: false },
+      { q: 'Small frustrations or inconveniences feel disproportionately big in my body.',                                                scale: 4, reverse: false },
+      { q: 'I go numb, zone out, or disconnect when I feel overwhelmed.',                                                                 scale: 4, reverse: false },
+      { q: 'I carry tension in my chest, neck, jaw, or shoulders most days.',                                                             scale: 4, reverse: false },
+      { q: 'I overthink situations and replay conversations or events long after they have passed.',                                      scale: 4, reverse: false },
+      { q: 'I feel a low-level sense of dread or unease even when things are fine.',                                                      scale: 4, reverse: false },
+      { q: 'My body feels like it is always braced for something to go wrong.',                                                           scale: 4, reverse: false },
+    ],
+    research: {
+      green:  'Your nervous system shows good capacity for self-regulation. Polyvagal theory describes this as a flexible, responsive autonomic system — able to mobilize in response to threat and return to ventral vagal safety (Porges, 2011).',
+      yellow: 'Your nervous system is showing signs of strain. Persistent low-grade hyperarousal or shutdown responses suggest your window of tolerance may be narrowed — a common outcome of accumulated stress without adequate recovery.',
+      red:    'Your nervous system is carrying significant dysregulation. High scores here are consistent with trauma load, chronic stress, or burnout. Neuroscience shows a dysregulated autonomic nervous system impairs social engagement, decision-making, and the ability to process new information (van der Kolk, 2014).',
+    },
+  },
+  {
+    id: 'story',
+    title: 'Story, Identity & Meaning',
+    icon: '📖',
+    questions: [
+      { q: 'Growing up, the stress in my home felt bigger than I could handle.',                                                          scale: 5, reverse: false },
+      { q: 'I coped by trying to be perfect, achieve more, or take care of others.',                                                      scale: 5, reverse: false },
+      { q: 'When I fail at something, the voice inside my head is harsh or shaming.',                                                     scale: 5, reverse: false },
+      { q: 'My sense of worth is tied to how well I am performing or producing.',                                                         scale: 5, reverse: false },
+      { q: 'Growing up, rest was seen as lazy or not allowed in my home.',                                                                scale: 5, reverse: false },
+      { q: 'My sense of safety depended on behaving well, achieving, or not taking up too much space.',                                  scale: 5, reverse: false },
+      { q: 'I grew up believing that making mistakes made me a disappointment to others.',                                                scale: 5, reverse: false },
+      { q: 'I feel pressure to be impressive or have it together in order to be accepted.',                                               scale: 5, reverse: false },
+      { q: 'Most of my sense of self-worth comes from what I accomplish.',                                                                scale: 5, reverse: false },
+      { q: 'I replay mistakes or embarrassing moments long after they have passed.',                                                      scale: 5, reverse: false },
+      { q: 'Criticism lands hard and I feel it physically, not just emotionally.',                                                        scale: 5, reverse: false },
+    ],
+    research: {
+      green:  'Your narrative identity appears relatively integrated. Research on post-traumatic growth and identity coherence shows that the ability to construct a meaningful story from past difficulty is strongly associated with resilience and relational depth (McAdams, 2001).',
+      yellow: 'Moderate narrative strain is present. Unresolved stories don\'t just live in the mind — they live in the body, shaping posture, reactivity, and relational patterns. This is the most common "hidden driver" of patterns clients want to change.',
+      red:    'Significant story and identity strain is indicated. High levels of rumination, shame, and past-present confusion are associated with elevated cortisol, impaired present-moment awareness, and chronic relational difficulty. Narrative therapy and somatic approaches show the most evidence for this domain.',
+    },
+  },
+  {
+    id: 'recovery',
+    title: 'Recovery, Rhythm & Lifestyle',
+    icon: '🔄',
+    questions: [
+      { q: 'How consistent is your daily routine or sleep schedule?',                                                                     labels: ['Very consistent', 'Somewhat consistent', 'Inconsistent', 'Completely unpredictable'], reverse: false },
+      { q: 'How often do you move your body intentionally — walking, stretching, exercise of any kind?',                                  labels: ['Daily', 'Most days', 'A few times a week', 'Rarely or never'], reverse: false },
+      { q: 'How often do you do something purely for enjoyment — not productivity, not exercise?',                                        labels: ['Weekly', 'Every couple of weeks', 'Monthly', 'Almost never'], reverse: false },
+      { q: 'Do you have any regular practices that help you feel calm or grounded — prayer, breathwork, time in nature, meditation?',     labels: ['Daily', 'Sometimes', 'Rarely', 'Never'], reverse: false },
+      { q: 'How often do you feel rushed, behind, or overwhelmed by your daily load?',                                                    labels: ['Rarely', 'Sometimes', 'Often', 'Almost every day'], reverse: false },
+      { q: 'How would you describe your overall stress level right now?',                                                                 labels: ['Low', 'Moderate', 'High', 'Very high'], reverse: false },
+      { q: 'I feel guilty or restless when I am not being productive.',                                                                   scale: 4, reverse: false },
+      { q: 'My sense of being okay depends on staying busy or getting things done.',                                                      scale: 4, reverse: false },
+      { q: 'I scroll, watch things, or stay busy to avoid sitting with my thoughts.',                                                     scale: 4, reverse: false },
+      { q: 'I stay up later than I want to because it is the only time I feel like the day is mine.',                                     scale: 4, reverse: false },
+      { q: 'My days feel reactive and chaotic rather than intentional.',                                                                  scale: 4, reverse: false },
+      { q: 'I rarely make time for things that bring me joy or make me feel like myself.',                                                scale: 4, reverse: false },
+      { q: 'I use busyness or screens to avoid being alone with how I actually feel.',                                                    scale: 4, reverse: false },
+    ],
+    research: {
+      green:  'Your recovery rhythms appear healthy. Regular rest, play, and intentional breaks allow the nervous system to downregulate and consolidate learning — critical for sustained performance and emotional availability (Loehr & Schwartz, 2003).',
+      yellow: 'Moderate recovery strain is present. Chronic urgency and the inability to fully recover are early warning signs of burnout. The research on ultradian rhythms shows that 90-minute work cycles with intentional rest are biologically necessary, not optional.',
+      red:    'Significant recovery deficit is present. Research on burnout identifies persistent non-recovery as a primary driver — when the body never completes its stress-response cycle, it accumulates allostatic load that eventually manifests as physical, emotional, and cognitive breakdown (Maslach & Leiter, 2016).',
+    },
+  },
+  {
+    id: 'relational',
+    title: 'Emotional & Relational Environment',
+    icon: '💛',
+    questions: [
+      { q: 'Growing up, my family avoided talking about emotions.',                                                                       scale: 5, reverse: false },
+      { q: 'I felt responsible for keeping the peace at home.',                                                                           scale: 5, reverse: false },
+      { q: 'My feelings were treated as too much or inconvenient by others.',                                                             scale: 5, reverse: false },
+      { q: 'I felt alone with my emotions even when people were around.',                                                                 scale: 5, reverse: false },
+      { q: 'The adults in my home were often overwhelmed, absent, or emotionally unavailable.',                                           scale: 5, reverse: false },
+      { q: 'I felt pressure to be the strong, mature, or responsible one growing up.',                                                    scale: 5, reverse: false },
+      { q: 'My home felt unpredictable, tense, or unsafe at times.',                                                                     scale: 5, reverse: false },
+      { q: 'I learned to read people\'s moods carefully as a way to stay safe.',                                                          scale: 5, reverse: false },
+      { q: 'I was afraid of someone\'s anger or emotional reactions growing up.',                                                         scale: 5, reverse: false },
+      { q: 'A trusted adult regularly checked in on how I was feeling inside.',                                                           scale: 5, reverse: true  },
+      { q: 'I remember feeling like I had to walk on eggshells around someone in my home.',                                               scale: 5, reverse: false },
+      { q: 'I never knew which version of a parent or caregiver I was going to get.',                                                     scale: 5, reverse: false },
+      { q: 'I felt pressure to keep things secret or pretend everything was fine.',                                                       scale: 5, reverse: false },
+      { q: 'I rarely felt truly known or understood by the people around me growing up.',                                                 scale: 5, reverse: false },
+      { q: 'There was yelling, explosive anger, or frightening behavior in my home growing up.',                                          scale: 5, reverse: false },
+      { q: 'I was aware of financial stress or money problems in my home growing up.',                                                    scale: 5, reverse: false },
+      { q: 'I felt pressure to emotionally support or take care of a parent.',                                                            scale: 5, reverse: false },
+      { q: 'A parent confided in me about adult problems, relationship struggles, or their feelings about the other parent.',             scale: 5, reverse: false },
+      { q: 'I felt more like a friend, therapist, or emotional partner to a parent than a child.',                                        scale: 5, reverse: false },
+      { q: 'I felt responsible for a parent\'s happiness, mood, or emotional state.',                                                     scale: 5, reverse: false },
+    ],
+    research: {
+      green:  'Your relational environment appears to be a source of support and safety. Attachment research consistently shows that secure relational bonds are one of the most powerful buffers against stress, trauma, and mental health decline (Bowlby, Siegel).',
+      yellow: 'Moderate relational strain is present. Emotional suppression and relational tension quietly tax the nervous system — social pain activates the same neural circuits as physical pain. Safe, attuned relationships are biological necessities, not luxuries.',
+      red:    'High relational and emotional strain is indicated. Chronic loneliness is now recognized as a significant health risk comparable to smoking 15 cigarettes a day (Holt-Lunstad, 2015). Emotional unsafety and persistent disconnection deepen every other domain scored here.',
+    },
+  },
+  {
+    id: 'body',
+    title: 'Body, Boundaries & Early Sexual Environment',
+    icon: '🛡️',
+    note: 'These questions address sensitive topics including body image, boundaries, and early sexual environment. Your answers are completely private and used only for coaching and research purposes.',
+    questions: [
+      { q: 'My body was commented on, criticized, or sexualized by an adult when I was growing up.',                                      scale: 5, reverse: false },
+      { q: 'Before the age of 18 I was exposed to sexual content, images, or conversations that felt inappropriate or that I was not ready for.', scale: 5, reverse: false },
+      { q: 'Someone touched me, looked at me, or spoke to me in a way that felt violating or wrong.',                                     scale: 5, reverse: false },
+      { q: 'An adult made me feel responsible for their sexual feelings or behavior.',                                                    scale: 5, reverse: false },
+      { q: 'Sex was treated as something shameful, dangerous, or never talked about in my home.',                                         scale: 5, reverse: false },
+      { q: 'I have experienced something sexually that I have never fully named as harmful or wrong.',                                    scale: 5, reverse: false },
+      { q: 'I learned to disconnect from my body as a way to feel safe or get through difficult situations.',                             scale: 5, reverse: false },
+      { q: 'I carry shame or deep discomfort when I think about my body.',                                                                scale: 5, reverse: false },
+      { q: 'I struggle with pornography use or compulsive sexual behavior.',                                                              scale: 5, reverse: false },
+      { q: 'My relationship with my own body feels distant, foreign, or difficult to access.',                                            scale: 5, reverse: false },
+      { q: 'It is hard to feel safe, at ease, or at home in my own body.',                                                                scale: 5, reverse: false },
+    ],
+    research: {
+      green:  'Your body awareness and boundary capacity appear strong. Interoception — the ability to sense and respond to body signals — is strongly linked to emotional intelligence, self-regulation, and the ability to maintain healthy relational boundaries (Craig, 2009).',
+      yellow: 'Moderate disconnection from body signals and boundaries is present. Habitually overriding the body\'s signals is often a learned adaptation to early environments where needs weren\'t safe to express — and it carries a cumulative physiological cost.',
+      red:    'Significant body disconnection and boundary strain is indicated. Research on somatic psychology shows that chronic body suppression and boundary violations — whether self-imposed or relational — are closely linked to nervous system dysregulation, dissociation, and difficulty recovering from stress (Levine, 2010).',
+    },
+  },
+];
+
+const SCALE_4 = ['Rarely', 'Sometimes', 'Often', 'Almost Always'];
+const SCALE_5 = ['Never', 'Rarely', 'Sometimes', 'Often', 'Almost Always'];
+
+/* ═══════════════════════════════════════════════════════════════
+   RESOURCES
+   Shown on results page for any section scoring yellow or red.
+   'relational' and 'body' sections share a combined resource group.
+   ═══════════════════════════════════════════════════════════════ */
+const RESOURCE_GROUPS = {
+  physical: {
+    label: 'Physical Load & Sleep',
+    items: [
+      { type: 'book',    title: 'When the Body Says No',       author: 'Gabor Maté' },
+      { type: 'book',    title: "Why Zebras Don't Get Ulcers", author: 'Robert Sapolsky' },
+      { type: 'book',    title: 'Healing Back Pain',           author: 'John Sarno' },
+      { type: 'youtube', title: "Conner's YouTube Channel",    url: 'https://youtube.com/@connercustodio' },
+    ],
+  },
+  nutrition: {
+    label: 'Nutrition, Fuel & Hydration',
+    items: [
+      { type: 'book',    title: 'The Autoimmune Cure',   author: 'Sara Szal' },
+      { type: 'book',    title: 'When the Body Says No', author: 'Gabor Maté' },
+      { type: 'website', title: 'connercustodio.com',    url: 'https://connercustodio.com' },
+    ],
+  },
+  nervous: {
+    label: 'Nervous System & Stress Response',
+    items: [
+      { type: 'book',    title: 'The Body Keeps the Score',    author: 'Bessel van der Kolk' },
+      { type: 'book',    title: "Why Zebras Don't Get Ulcers", author: 'Robert Sapolsky' },
+      { type: 'book',    title: 'Scattered Minds',             author: 'Gabor Maté' },
+      { type: 'podcast', title: 'Mel Robbins with Gabor Maté' },
+      { type: 'youtube', title: 'Watch on YouTube',            url: 'https://youtu.be/KPgPcF9-hI0' },
+      { type: 'youtube', title: 'Watch on YouTube',            url: 'https://youtu.be/Oit3_Cm4WyM' },
+      { type: 'youtube', title: "Conner's YouTube Channel",    url: 'https://youtube.com/@connercustodio' },
+    ],
+  },
+  story: {
+    label: 'Story, Identity & Meaning',
+    items: [
+      { type: 'book',    title: 'The Wounded Heart',   author: 'Dan Allender' },
+      { type: 'book',    title: 'What Happened to You', author: 'Bruce Perry & Oprah Winfrey' },
+      { type: 'book',    title: 'How People Grow',      author: 'Cloud & Townsend' },
+      { type: 'podcast', title: 'The Allender Center Podcast' },
+      { type: 'podcast', title: 'Three Percent Podcast' },
+      { type: 'podcast', title: 'The Places We Find Ourselves' },
+      { type: 'website', title: 'theallendercenter.org', url: 'https://theallendercenter.org' },
+    ],
+  },
+  recovery: {
+    label: 'Recovery, Rhythm & Lifestyle',
+    items: [
+      { type: 'book',    title: "Why Zebras Don't Get Ulcers", author: 'Robert Sapolsky' },
+      { type: 'podcast', title: 'Mel Robbins with Sara Szal' },
+      { type: 'website', title: 'connercustodio.com',           url: 'https://connercustodio.com' },
+      { type: 'youtube', title: "Conner's YouTube Channel",     url: 'https://youtube.com/@connercustodio' },
+    ],
+  },
+  relational_body: {
+    label: 'Emotional, Relational & Body',
+    items: [
+      { type: 'book',    title: 'Unwanted',             author: 'Jay Stringer' },
+      { type: 'book',    title: 'Desire',               author: 'Jay Stringer' },
+      { type: 'book',    title: 'Porn',                 author: 'Drew Boad' },
+      { type: 'book',    title: 'The Wounded Heart',    author: 'Dan Allender' },
+      { type: 'book',    title: 'What Happened to You', author: 'Bruce Perry & Oprah Winfrey' },
+      { type: 'podcast', title: 'The Allender Center Podcast' },
+      { type: 'podcast', title: 'The Places We Find Ourselves' },
+      { type: 'podcast', title: 'Three Percent Podcast' },
+      { type: 'website', title: 'theallendercenter.org', url: 'https://theallendercenter.org' },
+      { type: 'youtube', title: 'Watch on YouTube',      url: 'https://youtu.be/KPgPcF9-hI0' },
+      { type: 'youtube', title: 'Watch on YouTube',      url: 'https://youtu.be/Oit3_Cm4WyM' },
+    ],
+  },
+};
+
+// Maps each section id to its resource group key
+const SECTION_RESOURCE_KEY = {
+  physical:   'physical',
+  nutrition:  'nutrition',
+  nervous:    'nervous',
+  story:      'story',
+  recovery:   'recovery',
+  relational: 'relational_body',
+  body:       'relational_body',
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════════════════ */
+const state = {
+  agrees: { age: false, disc: false },
+  demographics: {},
+  enneagram: null,
+  symptoms: [],
+  // answers[sectionIdx][qIdx] = raw value (0-based index into scale)
+  answers: Array.from({ length: 7 }, () => ({})),
+  reflection: {},
+  email: '',
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  buildSymptoms();
+  buildEnneagram();
+  buildSectionScreens();
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init(CONFIG.emailjsPublicKey);
+  }
+});
+
+function buildSymptoms() {
+  const grid = document.getElementById('symptoms-grid');
+  SYMPTOMS.forEach(sym => {
+    const el = document.createElement('label');
+    el.className = 'cb-item';
+    el.dataset.val = sym;
+    el.innerHTML = `<input type="checkbox"><div class="cb-dot"></div>${sym}`;
+    el.addEventListener('click', e => {
+      e.preventDefault();
+      el.classList.toggle('checked');
+      if (el.classList.contains('checked')) {
+        if (!state.symptoms.includes(sym)) state.symptoms.push(sym);
+      } else {
+        state.symptoms = state.symptoms.filter(s => s !== sym);
+      }
+    });
+    grid.appendChild(el);
+  });
+}
+
+function buildEnneagram() {
+  // Enneagram is now a <select id="d-enn"> — no JS generation needed.
+  // Read its value in submitDemographics().
+}
+
+function buildSectionScreens() {
+  const container = document.getElementById('section-screens-container');
+  // Compute cumulative question offsets for global question numbers
+  const qOffsets = SECTIONS.map((_, si) =>
+    SECTIONS.slice(0, si).reduce((acc, s) => acc + s.questions.length, 0)
+  );
+
+  SECTIONS.forEach((sec, si) => {
+    const prevId = si === 0 ? 's-demographics' : `s-section-${si - 1}`;
+    const nextId = si === 6 ? 's-reflection' : `s-section-${si + 1}`;
+    const step = si + 2; // steps 2–8
+    const pct = Math.round(step / 9 * 100);
+
+    const div = document.createElement('div');
+    div.className = 'screen';
+    div.id = `s-section-${si}`;
+
+    // Optional sensitive-topic note
+    const noteHtml = sec.note
+      ? `<div style="background:#E8F6F5;border-left:3px solid #4DBFB8;border-radius:8px;padding:0.85rem 1rem;font-size:0.82rem;color:#1A2E35;margin-bottom:1.25rem;line-height:1.6;">${sec.note}</div>`
+      : '';
+
+    let qHtml = '';
+    sec.questions.forEach((q, qi) => {
+      // Resolve labels: custom array > scale 5 > scale 4 (default)
+      const labels = q.labels || (q.scale === 5 ? SCALE_5 : SCALE_4);
+      const globalQ = qOffsets[si] + qi + 1;
+      let optHtml = labels.map((lbl, vi) => `
+        <label class="scale-opt" onclick="recordAnswer(${si},${qi},${vi})">
+          <input type="radio" name="q-${si}-${qi}" value="${vi}">
+          <div class="scale-circle"></div>
+          <span class="scale-lbl">${lbl}</span>
+        </label>`).join('');
+
+      qHtml += `
+        <div class="q-block" id="qb-${si}-${qi}">
+          <div class="q-meta"><span class="q-num">Q${globalQ}</span></div>
+          <div class="q-text">${q.q}</div>
+          <div class="scale-row">${optHtml}</div>
+        </div>`;
+    });
+
+    div.innerHTML = `
+      <div class="site-header">
+        <div class="logo">HART <span>Assessment</span></div>
+        <div class="step-label">${step} of 9</div>
+      </div>
+      <div class="page-wrap">
+        <div class="progress-wrap">
+          <div class="progress-meta">
+            <div class="progress-title">${sec.icon} ${sec.title}</div>
+            <div class="progress-pct">${step} of 9</div>
+          </div>
+          <div class="progress-track"><div class="progress-bar" style="width:${pct}%"></div></div>
+        </div>
+        <div class="card">
+          <div class="section-badge">Section ${si + 1} of 7</div>
+          <h2>${sec.title}</h2>
+          <p>Answer based on your experience over the <strong>past 30 days</strong>. There are no right or wrong answers.</p>
+          <div class="divider"></div>
+          ${noteHtml}${qHtml}
+          <div class="warn-msg" id="warn-${si}">Please answer all questions before continuing.</div>
+          <div class="btn-row">
+            <button class="btn btn-ghost" onclick="goTo('${prevId}')">← Back</button>
+            <button class="btn btn-primary" onclick="submitSection(${si}, '${nextId}')">Continue →</button>
+          </div>
+        </div>
+        <div class="page-footer">&copy; 2025 Conner Custodio. All rights reserved.</div>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════════════════════════ */
+function goTo(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(screenId);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DISCLAIMER
+   ═══════════════════════════════════════════════════════════════ */
+function toggleAgree(key) {
+  state.agrees[key] = !state.agrees[key];
+  const row = document.getElementById(`row-${key}`);
+  const chk = document.getElementById(`chk-${key}`);
+  row.classList.toggle('checked', state.agrees[key]);
+  const btn = document.getElementById('btn-start');
+  btn.disabled = !(state.agrees.age && state.agrees.disc);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DEMOGRAPHICS
+   ═══════════════════════════════════════════════════════════════ */
+function submitDemographics() {
+  const age    = document.getElementById('d-age').value;
+  const sex    = document.getElementById('d-sex').value;
+  const reason = document.getElementById('d-reason').value;
+  const warn   = document.getElementById('demo-warn');
+
+  if (!age || !sex || !reason) {
+    warn.classList.add('visible');
+    return;
+  }
+  warn.classList.remove('visible');
+  state.enneagram = document.getElementById('d-enn').value || null;
+  state.demographics = { age, sex, reason };
+  goTo('s-section-0');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTIONS
+   ═══════════════════════════════════════════════════════════════ */
+function recordAnswer(si, qi, val) {
+  state.answers[si][qi] = val;
+  const block = document.getElementById(`qb-${si}-${qi}`);
+  if (block) block.classList.remove('unanswered');
+}
+
+function submitSection(si, nextId) {
+  const numQ = SECTIONS[si].questions.length;
+  const missing = [];
+  for (let qi = 0; qi < numQ; qi++) {
+    if (state.answers[si][qi] === undefined) missing.push(qi);
+  }
+  const warn = document.getElementById(`warn-${si}`);
+  if (missing.length) {
+    missing.forEach(qi => {
+      const block = document.getElementById(`qb-${si}-${qi}`);
+      if (block) block.classList.add('unanswered');
+    });
+    warn.classList.add('visible');
+    // scroll to first unanswered
+    const first = document.getElementById(`qb-${si}-${missing[0]}`);
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  warn.classList.remove('visible');
+  goTo(nextId);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   REFLECTION & SUBMIT
+   ═══════════════════════════════════════════════════════════════ */
+function submitAssessment() {
+  const email = document.getElementById('r-email').value.trim();
+  const warn  = document.getElementById('email-warn');
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    warn.classList.add('visible');
+    return;
+  }
+  warn.classList.remove('visible');
+
+  state.email = email;
+  state.reflection = {
+    context: document.getElementById('r-context').value.trim(),
+  };
+
+  const scores = computeScores();
+  renderResults(scores);
+  goTo('s-results');
+
+  // Fire-and-forget — don't block the results page
+  Promise.all([
+    subscribeMailchimp(email, scores),
+    notifyCoach(email, scores),
+  ]).catch(() => {}); // silently fail if not configured
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCORING
+   ═══════════════════════════════════════════════════════════════ */
+// Returns a normalised strain value 0–100 for a section.
+// Each item is normalised to 0–1 (higher = more strain), then averaged.
+function scoreSection(si) {
+  const sec = SECTIONS[si];
+  let total = 0;
+  sec.questions.forEach((q, qi) => {
+    const raw = state.answers[si][qi] ?? 0; // 0-based index into label array
+    // Derive max from custom labels array if present, else from scale
+    const numOpts = q.labels ? q.labels.length : q.scale;
+    const max = numOpts - 1;
+    let norm = max > 0 ? raw / max : 0; // 0–1
+    if (q.reverse) norm = 1 - norm;
+    total += norm;
+  });
+  return Math.round((total / sec.questions.length) * 100);
+}
+
+function computeScores() {
+  const sectionScores = SECTIONS.map((_, si) => scoreSection(si));
+  // Story Impact Score = section 3 (Story & Identity)
+  const storyScore = sectionScores[3];
+  // Current Strain = mean of the 6 non-story sections
+  const strainSections = [0, 1, 2, 4, 5, 6];
+  const strainScore = Math.round(strainSections.reduce((s, i) => s + sectionScores[i], 0) / 6);
+  return { storyScore, strainScore, sectionScores };
+}
+
+function getColor(pct) {
+  if (pct <= 40) return 'green';
+  if (pct <= 65) return 'yellow';
+  return 'red';
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESULTS RENDER
+   ═══════════════════════════════════════════════════════════════ */
+function renderResults({ storyScore, strainScore, sectionScores }) {
+  document.getElementById('r-story-score').textContent  = storyScore  + '%';
+  document.getElementById('r-strain-score').textContent = strainScore + '%';
+
+  const list = document.getElementById('section-results-list');
+  list.innerHTML = '';
+
+  // Show all 6 non-story sections first, then story last
+  const order = [0, 1, 2, 4, 5, 6, 3];
+  order.forEach(si => {
+    const sec   = SECTIONS[si];
+    const pct   = sectionScores[si];
+    const color = getColor(pct);
+    const level = color === 'green' ? 'green' : color === 'yellow' ? 'yellow' : 'red';
+    const desc  = sec.research[level];
+
+    const item = document.createElement('div');
+    item.className = 'section-result';
+    item.innerHTML = `
+      <div class="dot-wrap"><div class="dot ${color}"></div></div>
+      <div class="sr-body">
+        <div class="sr-head">
+          <div class="sr-name">${sec.icon} ${sec.title}</div>
+          <div class="sr-pct ${color}">${pct}%</div>
+        </div>
+        <div class="sr-bar">
+          <div class="sr-fill ${color}" style="width:0%" data-target="${pct}"></div>
+        </div>
+        <div class="sr-desc">${desc}</div>
+      </div>`;
+    list.appendChild(item);
+  });
+
+  // Animate bars after a brief delay
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      document.querySelectorAll('.sr-fill').forEach(bar => {
+        bar.style.width = bar.dataset.target + '%';
+      });
+    }, 150);
+  });
+
+  renderResources(sectionScores);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESOURCES RENDER
+   ═══════════════════════════════════════════════════════════════ */
+function renderResources(sectionScores) {
+  const card = document.getElementById('resources-card');
+  const list = document.getElementById('resources-list');
+  list.innerHTML = '';
+
+  const TYPE_LABEL = { book: 'Book', podcast: 'Podcast', youtube: 'YouTube', website: 'Website' };
+
+  // Walk sections in display order; collect unique resource groups for non-green sections
+  const seen = new Set();
+  const toShow = [];
+  const order = [0, 1, 2, 4, 5, 6, 3];
+  order.forEach(si => {
+    const color = getColor(sectionScores[si]);
+    if (color === 'green') return;
+    const key = SECTION_RESOURCE_KEY[SECTIONS[si].id];
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    toShow.push({ key, color });
+  });
+
+  if (toShow.length === 0) {
+    card.style.display = 'none';
+    return;
+  }
+  card.style.display = 'block';
+
+  toShow.forEach(({ key, color }) => {
+    const group = RESOURCE_GROUPS[key];
+    const itemsHtml = group.items.map(item => {
+      const authorHtml = item.author
+        ? `<div class="rinfo-author">by ${item.author}</div>` : '';
+      const linkHtml = item.url
+        ? `<div class="rinfo-link"><a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.url.replace(/^https?:\/\//, '')}</a></div>` : '';
+      return `
+        <div class="resource-item">
+          <span class="rtype rtype-${item.type}">${TYPE_LABEL[item.type] || item.type}</span>
+          <div class="rinfo">
+            <div class="rinfo-title">${item.title || ''}</div>
+            ${authorHtml}${linkHtml}
+          </div>
+        </div>`;
+    }).join('');
+
+    const groupEl = document.createElement('div');
+    groupEl.className = 'resource-group';
+    groupEl.innerHTML = `
+      <div class="resource-group-head">
+        <div class="dot ${color}"></div>
+        <span class="resource-group-name">${group.label}</span>
+      </div>
+      <div class="resource-items">${itemsHtml}</div>`;
+    list.appendChild(groupEl);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MAILCHIMP JSONP SUBSCRIBE
+   ═══════════════════════════════════════════════════════════════ */
+function subscribeMailchimp(email, scores) {
+  return new Promise((resolve, reject) => {
+    if (CONFIG.mailchimpFormUrl.includes('YOUR_')) {
+      console.warn('HART: Mailchimp URL not configured.');
+      return resolve();
+    }
+
+    // Convert /post? → /post-json? for JSONP
+    const baseUrl = CONFIG.mailchimpFormUrl.replace('/post?', '/post-json?');
+    const cbName  = '_mc_cb_' + Date.now();
+
+    window[cbName] = (res) => {
+      delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+      res.result === 'success' ? resolve(res) : reject(res.msg);
+    };
+
+    const params = new URLSearchParams({
+      EMAIL:            email,
+      MERGE2:           state.demographics.age    || '',
+      MERGE3:           state.demographics.sex    || '',
+      MERGE4:           (state.symptoms || []).join(', '),
+      MERGE5:           state.demographics.reason || '',
+      MERGE6:           state.enneagram ? String(state.enneagram) : '',
+      MERGE7:           String(scores.storyScore),
+      MERGE8:           String(scores.strainScore),
+      c:                cbName,
+    });
+
+    const script = document.createElement('script');
+    script.src = `${baseUrl}&${params.toString()}`;
+    script.onerror = reject;
+    document.head.appendChild(script);
+
+    setTimeout(() => {
+      if (window[cbName]) {
+        delete window[cbName];
+        resolve(); // timeout — continue silently
+      }
+    }, 8000);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EMAILJS COACH NOTIFICATION
+   ═══════════════════════════════════════════════════════════════ */
+function notifyCoach(email, { storyScore, strainScore, sectionScores }) {
+  if (CONFIG.emailjsServiceId.includes('YOUR_')) {
+    console.warn('HART: EmailJS not configured — coach notification skipped.');
+    return Promise.resolve();
+  }
+
+  const sectionSummary = SECTIONS.map((s, i) =>
+    `${s.title}: ${sectionScores[i]}% (${getColor(sectionScores[i]).toUpperCase()})`
+  ).join('\n');
+
+  const message = [
+    `New HART Assessment submission`,
+    ``,
+    `EMAIL: ${email}`,
+    `AGE RANGE: ${state.demographics.age}`,
+    `BIOLOGICAL SEX: ${state.demographics.sex}`,
+    `REASON: ${state.demographics.reason}`,
+    `SYMPTOMS: ${state.symptoms.join(', ') || 'None selected'}`,
+    `ENNEAGRAM: ${state.enneagram || 'Not provided'}`,
+    ``,
+    `STORY IMPACT SCORE: ${storyScore}%`,
+    `CURRENT STRAIN SCORE: ${strainScore}%`,
+    ``,
+    `SECTION SCORES:`,
+    sectionSummary,
+    ``,
+    `REFLECTION — What they wish someone understood:`,
+    state.reflection.context || '(not provided)',
+  ].join('\n');
+
+  return emailjs.send(
+    CONFIG.emailjsServiceId,
+    CONFIG.emailjsTemplateId,
+    {
+      to_email: CONFIG.coachEmail,
+      subject:  `New HART Assessment — ${email}`,
+      message,
+    }
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UTILITIES
+   ═══════════════════════════════════════════════════════════════ */
+function showToast(msg, duration = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+function retake() {
+  // Reset state
+  state.agrees = { age: false, disc: false };
+  state.demographics = {};
+  state.enneagram = null;
+  state.symptoms = [];
+  state.answers = Array.from({ length: 7 }, () => ({}));
+  state.reflection = {};
+  state.email = '';
+
+  // Reset UI
+  document.getElementById('btn-start').disabled = true;
+  document.querySelectorAll('.agree-row').forEach(r => r.classList.remove('checked'));
+  document.querySelectorAll('.cb-item').forEach(c => c.classList.remove('checked'));
+  document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+  document.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
+  document.querySelectorAll('textarea').forEach(t => t.value = '');
+  document.getElementById('r-email').value = '';
+  document.querySelectorAll('.q-block').forEach(b => b.classList.remove('unanswered'));
+  document.querySelectorAll('.warn-msg').forEach(w => w.classList.remove('visible'));
+
+  goTo('s-disclaimer');
+}
+</script>
+</body>
+</html>
