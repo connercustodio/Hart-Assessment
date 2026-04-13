@@ -883,7 +883,6 @@ const SECTIONS = [
       { q: 'Do you eat breakfast most days?',                                                                                             labels: ['Yes, every day', 'Most days', 'Sometimes', 'Rarely or never'], reverse: false },
       { q: 'Overall, do you feel like you eat enough food to fuel your body through the day?',                                            labels: ['Yes, consistently', 'Most days', 'Some days', 'Rarely'], reverse: false },
       { q: 'How consistently do you eat carbohydrates — bread, rice, fruit, potatoes, oats — as part of your meals?',                    labels: ['Every meal', 'Most meals', 'Occasionally', 'I try to avoid them'], reverse: false },
-      { q: 'How much water do you drink on a typical day?',                                                                               labels: ['Less than 60 oz', '60–90 oz', '90–120 oz', '120+ oz'], reverse: true  },
       { q: 'How consistently do you eat protein as part of your meals?',                                                                  labels: ['Every meal', 'Most meals', 'Sometimes', 'Rarely'], reverse: false },
       { q: 'I skip meals because I am too busy, stressed, or forget to eat.',                                                             scale: 4, reverse: false },
       { q: 'Hours pass during the day and I realize I have not eaten anything substantial.',                                              scale: 4, reverse: false },
@@ -1152,26 +1151,31 @@ document.addEventListener('DOMContentLoaded', () => {
     emailjs.init(CONFIG.emailjsPublicKey);
   }
 
-  // ── Dev shortcut: type "test123" on the disclaimer page to preview results ──
+  // ── Dev shortcut: type "test123" anywhere to jump to results + fire Formspree ──
   let devBuffer = '';
   document.addEventListener('keydown', e => {
-    if (document.getElementById('s-disclaimer').classList.contains('active')) {
-      devBuffer += e.key;
-      if (devBuffer.length > 7) devBuffer = devBuffer.slice(-7);
-      if (devBuffer === 'test123') {
-        devBuffer = '';
-        state.email = 'dev@preview.test';
-        state.demographics = { age: '25–34', sex: 'Male', reason: 'Personal curiosity' };
-        state.symptoms = ['Chronic fatigue'];
-        state.enneagram = '3';
-        state.reflection = { context: 'Dev preview mode.' };
-        // Dummy scores — mix of green / yellow / red for visual testing
-        const dummy = { storyScore: 74, strainScore: 52, sectionScores: [68, 45, 71, 74, 38, 55, 62] };
-        renderResults(dummy);
-        goTo('s-results');
-      }
-    } else {
+    // Ignore keystrokes inside text inputs so typing doesn't accidentally trigger
+    const tag = document.activeElement.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+    devBuffer += e.key;
+    if (devBuffer.length > 7) devBuffer = devBuffer.slice(-7);
+    if (devBuffer === 'test123') {
       devBuffer = '';
+      state.email      = 'conner@connercustodio.com';
+      state.demographics = { age: '25–34', sex: 'Male', reason: 'Personal curiosity' };
+      state.symptoms   = ['Chronic fatigue', 'Anxiety or depression'];
+      state.enneagram  = '3';
+      state.reflection = { context: 'Dev test submission — test123 shortcut.' };
+
+      const dummy = { storyScore: 74, strainScore: 52, sectionScores: [68, 45, 71, 74, 38, 55, 62] };
+      renderResults(dummy);
+      goTo('s-results');
+
+      // Submit to Formspree so the webhook fires
+      submitFormspree(state.email, dummy)
+        .then(() => showToast('✓ Test submission sent to Formspree'))
+        .catch(() => showToast('Formspree submission failed — check console'));
     }
   });
 });
