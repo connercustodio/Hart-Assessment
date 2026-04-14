@@ -1444,6 +1444,29 @@ function submitFormspree(email, { storyScore, strainScore, sectionScores, named 
       water_intake:   getAnswerLabel(1, 12), // "I drink half my bodyweight in ounces…"
       stress_level:   getAnswerLabel(4,  5), // "How would you describe your overall stress level…"
 
+      // ── Nervous system key questions ─────────────────────────
+      q_wired_but_tired: getAnswerLabel(2,  4), // "I often feel exhausted but also too wired to rest."
+      q_dissociation:    getAnswerLabel(2,  9), // "I go numb, zone out, or disconnect when overwhelmed."
+      q_body_braced:     getAnswerLabel(2, 13), // "My body feels like it is always braced for something to go wrong."
+
+      // ── Enmeshment & triangulation (section 6 — relational) ──
+      q_financial_stress:          getAnswerLabel(5, 15), // "I was aware of financial stress growing up."
+      q_emotional_caretaker:       getAnswerLabel(5, 16), // "I felt pressure to emotionally support a parent."
+      q_parent_confided:           getAnswerLabel(5, 17), // "A parent confided in me about adult problems…"
+      q_felt_like_therapist:       getAnswerLabel(5, 18), // "I felt more like a friend, therapist, or emotional partner to a parent."
+      q_responsible_for_parent:    getAnswerLabel(5, 19), // "I felt responsible for a parent's happiness, mood, or emotional state."
+
+      // ── Body & sexual environment (section 7 — body) ─────────
+      q_body_commented_on:              getAnswerLabel(6,  0), // "My body was commented on, criticized, or sexualized…"
+      q_exposed_sexual_content:         getAnswerLabel(6,  1), // "Before age 18, exposed to sexual content…"
+      q_felt_violating:                 getAnswerLabel(6,  2), // "Someone touched, looked, or spoke in a way that felt violating…"
+      q_responsible_for_adult_feelings: getAnswerLabel(6,  3), // "An adult made me feel responsible for their sexual feelings…"
+      q_sex_shameful:                   getAnswerLabel(6,  4), // "Sex was treated as shameful or never talked about…"
+      q_unnamed_harm:                   getAnswerLabel(6,  5), // "Experienced something sexually never fully named as harmful…"
+      q_body_disconnect:                getAnswerLabel(6,  6), // "I learned to disconnect from my body to feel safe…"
+      q_body_shame:                     getAnswerLabel(6,  7), // "I carry shame or discomfort about my body."
+      q_pornography_struggle:           getAnswerLabel(6,  8), // "I struggle with pornography or compulsive sexual behavior."
+
       // ── Scores ──────────────────────────────────────────────
       story_impact_score:           storyScore  + '%',
       current_strain_score:         strainScore + '%',
