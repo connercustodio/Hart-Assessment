@@ -789,7 +789,7 @@
 
       <div id="teaser-scores" style="text-align:left;margin-bottom:1.5rem;"></div>
 
-      <p style="font-size:0.9rem;color:var(--g600);line-height:1.75;margin-bottom:0;">Your full results are on their way to your inbox. You'll find your complete 6-area breakdown, personalized resources, and research-backed insights waiting for you there.</p>
+      <p style="font-size:0.9rem;color:var(--g600);line-height:1.75;margin-bottom:0;">Your full results are on their way to your inbox. Click the link in your email to see your complete breakdown, personalized resources, and next steps.</p>
     </div>
 
     <div style="text-align:center;margin-bottom:2rem;">
@@ -1168,12 +1168,17 @@ document.addEventListener('DOMContentLoaded', () => {
       state.enneagram  = '3';
       state.reflection = { context: 'Dev test submission — test123 shortcut.' };
 
-      const dummy = { storyScore: 74, strainScore: 52, sectionScores: [68, 45, 71, 74, 38, 55, 62] };
+      const dummy = {
+        storyScore: 74, strainScore: 52,
+        sectionScores: [68, 45, 71, 74, 38, 55, 62],
+        named: { physical: 68, nutrition: 45, nervous_system: 71, story_identity: 74, recovery: 38, relational_body: Math.round((55 + 62) / 2) },
+      };
       renderResults(dummy);
       goTo('s-results');
 
       // Submit to Formspree so the webhook fires
-      submitFormspree(state.email, dummy)
+      const dummyUrl = buildResultsUrl(dummy);
+      submitFormspree(state.email, dummy, dummyUrl)
         .then(() => showToast('✓ Test submission sent to Formspree'))
         .catch(() => showToast('Formspree submission failed — check console'));
     }
@@ -1376,13 +1381,14 @@ function submitAssessment() {
   };
 
   const scores = computeScores();
+  const resultsUrl = buildResultsUrl(scores);
   renderResults(scores);
   goTo('s-results');
 
   // Fire-and-forget — don't block the results page
   const email = state.email;
   Promise.all([
-    submitFormspree(email, scores),
+    submitFormspree(email, scores, resultsUrl),
     subscribeMailchimp(email, scores),
     notifyCoach(email, scores),
   ]).catch(() => {});
@@ -1391,26 +1397,66 @@ function submitAssessment() {
 /* ═══════════════════════════════════════════════════════════════
    FORMSPREE SUBMISSION
    ═══════════════════════════════════════════════════════════════ */
-function submitFormspree(email, { storyScore, strainScore, sectionScores }) {
+
+// Returns the text label for a recorded answer, e.g. "7–9 hrs"
+function getAnswerLabel(sectionIdx, questionIdx) {
+  const raw = state.answers[sectionIdx]?.[questionIdx];
+  if (raw === undefined) return 'Not answered';
+  const q = SECTIONS[sectionIdx].questions[questionIdx];
+  const labels = q.labels || (q.scale === 5 ? SCALE_5 : SCALE_4);
+  return labels[raw] ?? 'Not answered';
+}
+
+function symptomYN(symptomName) {
+  return state.symptoms.includes(symptomName) ? 'yes' : 'no';
+}
+
+function submitFormspree(email, { storyScore, strainScore, sectionScores, named }, resultsUrl) {
   return fetch('https://formspree.io/f/xpqogvon', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify({
+      // ── Identity ────────────────────────────────────────────
       email,
-      age_range:                  state.demographics.age    || '',
-      biological_sex:             state.demographics.sex    || '',
-      symptoms:                   state.symptoms.join(', ') || 'None selected',
-      enneagram:                  state.enneagram           || 'Not provided',
-      story_impact_score:         storyScore  + '%',
-      current_strain_score:       strainScore + '%',
-      physical_load_score:        sectionScores[0] + '%',
-      nutrition_score:            sectionScores[1] + '%',
-      nervous_system_score:       sectionScores[2] + '%',
-      story_identity_score:       sectionScores[3] + '%',
-      recovery_rhythm_score:      sectionScores[4] + '%',
+      results_url: resultsUrl || '',
+
+      // ── Demographics ────────────────────────────────────────
+      age_range:         state.demographics.age    || '',
+      biological_sex:    state.demographics.sex    || '',
+      enneagram_number:  state.enneagram           || 'unknown',
+      reason_for_taking: state.demographics.reason || '',
+
+      // ── Symptoms (individual yes/no) ─────────────────────────
+      symptom_autoimmune:       symptomYN('Autoimmune condition'),
+      symptom_chronic_fatigue:  symptomYN('Chronic fatigue'),
+      symptom_anxiety_depression: symptomYN('Anxiety or depression'),
+      symptom_addiction:        symptomYN('Addiction or compulsive behavior'),
+      symptom_pornography:      symptomYN('Pornography use concerns'),
+      symptom_disordered_eating: symptomYN('Disordered eating'),
+      symptom_chronic_pain:     symptomYN('Chronic pain'),
+      symptom_sleep_issues:     symptomYN('Sleep issues'),
+
+      // ── Key research questions (actual answer text) ──────────
+      sleep_hours:    getAnswerLabel(0, 11), // "How many hours of sleep…"
+      rest_days:      getAnswerLabel(0,  2), // "How many full days of rest…"
+      breakfast:      getAnswerLabel(1,  1), // "Do you eat breakfast most days?"
+      carb_avoidance: getAnswerLabel(1,  3), // "How consistently do you eat carbohydrates…"
+      water_intake:   getAnswerLabel(1, 12), // "I drink half my bodyweight in ounces…"
+      stress_level:   getAnswerLabel(4,  5), // "How would you describe your overall stress level…"
+
+      // ── Scores ──────────────────────────────────────────────
+      story_impact_score:           storyScore  + '%',
+      current_strain_score:         strainScore + '%',
+      physical_load_score:          sectionScores[0] + '%',
+      nutrition_score:              sectionScores[1] + '%',
+      nervous_system_score:         sectionScores[2] + '%',
+      story_identity_score:         sectionScores[3] + '%',
+      recovery_rhythm_score:        sectionScores[4] + '%',
       relational_environment_score: sectionScores[5] + '%',
-      body_boundaries_score:      sectionScores[6] + '%',
-      final_reflection:           state.reflection.context  || '',
+      body_boundaries_score:        sectionScores[6] + '%',
+
+      // ── Reflection ──────────────────────────────────────────
+      final_reflection: state.reflection.context || '',
     }),
   });
 }
@@ -1442,7 +1488,33 @@ function computeScores() {
   // Current Strain = mean of the 6 non-story sections
   const strainSections = [0, 1, 2, 4, 5, 6];
   const strainScore = Math.round(strainSections.reduce((s, i) => s + sectionScores[i], 0) / 6);
-  return { storyScore, strainScore, sectionScores };
+  // Named scores for results URL (relational + body averaged into one)
+  const named = {
+    physical:        sectionScores[0],
+    nutrition:       sectionScores[1],
+    nervous_system:  sectionScores[2],
+    story_identity:  sectionScores[3],
+    recovery:        sectionScores[4],
+    relational_body: Math.round((sectionScores[5] + sectionScores[6]) / 2),
+  };
+  return { storyScore, strainScore, sectionScores, named };
+}
+
+function buildResultsUrl({ storyScore, strainScore, named }) {
+  const base = 'https://connercustodio.github.io/Hart-Assessment/results.html';
+  const p = new URLSearchParams({
+    email:           state.email,
+    story_impact:    storyScore,
+    current_strain:  strainScore,
+    physical:        named.physical,
+    nutrition:       named.nutrition,
+    nervous_system:  named.nervous_system,
+    story_identity:  named.story_identity,
+    recovery:        named.recovery,
+    relational_body: named.relational_body,
+    reflection:      state.reflection.context || '',
+  });
+  return `${base}?${p.toString()}`;
 }
 
 function getColor(pct) {
