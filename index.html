@@ -475,6 +475,108 @@
     .teaser-pct.yellow { color: var(--yellow); }
     .teaser-pct.red    { color: var(--red); }
 
+    /* ── Score key ── */
+    .score-key {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.4rem;
+      margin-bottom: 1rem;
+      padding: 0.75rem 1rem;
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--g200);
+    }
+    .score-key-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--g600); }
+    .score-key-item strong { color: var(--g800); }
+
+    /* ── Section resource block (inside section card) ── */
+    .sr-resources { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--g100); }
+    .sr-res-label {
+      font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--purple-dark); margin-bottom: 0.5rem;
+    }
+    .sr-res-item {
+      display: flex; align-items: flex-start; gap: 0.5rem;
+      font-size: 0.78rem; color: var(--g600); margin-bottom: 0.3rem; line-height: 1.4;
+    }
+    .sr-res-icon {
+      flex-shrink: 0; width: 16px; height: 16px; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; margin-top: 1px;
+    }
+    .sr-res-book { background: #EDE9FE; color: #7C3AED; }
+    .sr-res-pod  { background: #FCE7F3; color: #9D174D; }
+    .sr-res-yt   { background: #FEE2E2; color: #B91C1C; }
+    .sr-res-web  { background: #DBEAFE; color: #1D4ED8; }
+    .sr-res-item a { color: var(--purple-dark); text-decoration: none; }
+    .sr-res-item a:hover { text-decoration: underline; }
+
+    /* ── Reflection ── */
+    .reflection-card {
+      background: linear-gradient(135deg, #E8F8F7 0%, #F0FAFA 100%);
+      border-radius: 12px; padding: 1.25rem 1.5rem;
+      border-left: 4px solid var(--purple); margin-bottom: 1.5rem;
+    }
+    .reflection-label {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.09em; color: var(--purple-dark); margin-bottom: 0.6rem;
+    }
+    .reflection-text { font-size: 0.95rem; color: var(--g800); line-height: 1.75; font-style: italic; }
+
+    /* ── Results subheading ── */
+    .results-subhead {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--purple-dark);
+      opacity: 0.7; margin: 1.25rem 0 0.6rem;
+    }
+
+    /* ── Email notice ── */
+    .email-notice {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--purple-faint);
+      border: 1px solid rgba(77,191,184,0.3);
+      border-radius: 10px;
+      padding: 0.7rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.83rem;
+      color: var(--purple-dark);
+    }
+    .email-notice-icon { font-size: 1rem; flex-shrink: 0; }
+
+    /* ── Results CTA block ── */
+    .results-cta-wrap {
+      text-align: center;
+      background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple) 100%);
+      border-radius: 14px;
+      padding: 2rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .results-cta-heading {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 0.4rem;
+    }
+    .results-cta-sub {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.65;
+      margin-bottom: 1.4rem;
+      max-width: 360px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .results-cta-btn {
+      background: white !important;
+      color: var(--purple-dark) !important;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.18) !important;
+      font-size: 1rem !important;
+      padding: 0.875rem 2.25rem !important;
+    }
+    .results-cta-btn:hover { background: var(--purple-faint) !important; }
+
     /* ── Resources ── */
     .resource-group { margin-bottom: 1.5rem; }
     .resource-group:last-child { margin-bottom: 0; }
@@ -531,6 +633,40 @@
       padding: 1.5rem 0 0.5rem;
       color: var(--g400);
       font-size: 0.85rem;
+    }
+
+    /* ── Results social links ── */
+    .results-social {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--purple-faint);
+      border: 1px solid rgba(77,191,184,0.25);
+      border-radius: 8px;
+      padding: 0.45rem 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--purple-dark);
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .social-link:hover {
+      background: rgba(77,191,184,0.2);
+      border-color: var(--purple);
+    }
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--purple-dark);
+      flex-shrink: 0;
     }
 
     /* ── Toast ── */
@@ -787,18 +923,73 @@
   <div class="page-wrap">
     <div style="padding-top:1.75rem"></div>
 
-    <div class="card" style="text-align:center;">
-      <h2 id="results-heading" style="font-size:1.6rem;margin-bottom:0.5rem;">You're all set, friend!</h2>
-      <p style="margin-bottom:1.5rem;">Here's a quick look at your two overall scores.</p>
-
-      <div id="teaser-scores" style="text-align:left;margin-bottom:1.5rem;"></div>
-
-      <p style="font-size:0.9rem;color:var(--g600);line-height:1.75;margin-bottom:0;">Your full results are on their way to your inbox. Click the link in your email to see your complete breakdown, personalized resources, and next steps.</p>
+    <!-- Overall scores -->
+    <div class="results-hero">
+      <h2 id="results-heading">You're all set!</h2>
+      <p>Here's your complete HART Assessment breakdown.</p>
+      <div id="overall-scores" class="score-pair"></div>
     </div>
 
-    <div style="text-align:center;margin-bottom:2rem;">
-      <a href="https://connercustodio.com/contact" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="font-size:1rem;padding:0.875rem 2.5rem;">
-        Book a Clarity Call
+    <!-- Email confirmation notice -->
+    <div class="email-notice">
+      <span class="email-notice-icon">✉</span>
+      <span id="email-notice-text">A copy of your results has also been sent to your email.</span>
+    </div>
+
+    <!-- Score key -->
+    <div class="score-key">
+      <div class="score-key-item"><div class="dot green"></div><span><strong>Low</strong> &mdash; stable &amp; supported</span></div>
+      <div class="score-key-item"><div class="dot yellow"></div><span><strong>Moderate</strong> &mdash; worth attention</span></div>
+      <div class="score-key-item"><div class="dot red"></div><span><strong>High</strong> &mdash; carrying significant load</span></div>
+    </div>
+
+    <!-- Section breakdown -->
+    <div class="results-subhead">Section Breakdown</div>
+    <div id="full-section-results"></div>
+
+    <!-- Reflection -->
+    <div id="reflection-wrap" style="display:none;">
+      <div class="results-subhead">Your Reflection</div>
+      <div class="reflection-card">
+        <div class="reflection-label">In your own words</div>
+        <p id="reflection-text" class="reflection-text"></p>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="results-cta-wrap">
+      <p class="results-cta-heading">Ready to go deeper?</p>
+      <p class="results-cta-sub">A Clarity Call is a free, no-pressure conversation to explore what these results mean for your specific situation.</p>
+      <a href="https://connercustodio.com/contact" target="_blank" rel="noopener noreferrer" class="btn btn-primary results-cta-btn">
+        Book a Free Clarity Call &rarr;
+      </a>
+    </div>
+
+    <!-- Social links -->
+    <div class="results-social">
+      <a href="https://instagram.com/connercustodio" target="_blank" rel="noopener noreferrer" class="social-link">
+        <span class="social-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </span>
+        <span>@connercustodio</span>
+      </a>
+      <a href="mailto:info@connercustodio.com" class="social-link">
+        <span class="social-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+        </span>
+        <span>info@connercustodio.com</span>
+      </a>
+      <a href="https://youtube.com/@connercustodio" target="_blank" rel="noopener noreferrer" class="social-link">
+        <span class="social-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75,15.02 15.5,12 9.75,8.98 9.75,15.02" fill="currentColor" stroke="none"/></svg>
+        </span>
+        <span>youtube.com/@connercustodio</span>
+      </a>
+      <a href="https://connercustodio.com" target="_blank" rel="noopener noreferrer" class="social-link">
+        <span class="social-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </span>
+        <span>connercustodio.com</span>
       </a>
     </div>
 
@@ -1694,24 +1885,210 @@ function getColor(pct) {
 /* ═══════════════════════════════════════════════════════════════
    RESULTS RENDER
    ═══════════════════════════════════════════════════════════════ */
-function renderResults({ storyScore, strainScore }) {
-  // Personalise heading — no name collected so default to "friend"
+// Section display data — descriptions and resources for each scored section
+const RESULTS_SECTIONS = [
+  {
+    key: 'physical', name: 'Physical Load & Sleep',
+    desc: {
+      green:  'Your body appears to be getting adequate rest and recovery. Sleep and physical rhythm are foundational — keep protecting them.',
+      yellow: 'Some signs of physical strain or inconsistent recovery are present. Your body may be carrying more than it is releasing.',
+      red:    'Your body is carrying a measurable recovery deficit. Research consistently links chronic physical overextension and poor sleep to elevated cortisol, systemic inflammation, and increased vulnerability to autoimmune conditions.',
+    },
+    resources: [
+      { type: 'book', text: '"The Body Keeps the Score" — Bessel van der Kolk' },
+      { type: 'book', text: '"When the Body Says No" — Gabor Maté' },
+      { type: 'book', text: '"Why Zebras Don\'t Get Ulcers" — Robert Sapolsky' },
+    ],
+  },
+  {
+    key: 'nutrition', name: 'Nutrition & Fuel',
+    desc: {
+      green:  'Your fueling patterns appear to be supporting your body well. Consistent nutrition is one of the most powerful regulators of mood, energy, and immune function.',
+      yellow: 'Some inconsistency in fueling patterns detected. Your nervous system is highly sensitive to when and what you eat — small changes here can have big effects.',
+      red:    'Chronic underfueling — especially inadequate carbohydrates and water — keeps the body locked in a sympathetic survival state. When glucose is unavailable, the nervous system treats this as a threat, triggering hormonal dysregulation and immune suppression.',
+    },
+    resources: [
+      { type: 'book', text: '"The Autoimmune Cure" — Sara Szal' },
+      { type: 'book', text: '"When the Body Says No" — Gabor Maté' },
+      { type: 'book', text: '"The Wahls Protocol" — Terry Wahls' },
+      { type: 'book', text: '"Grain Brain" — David Perlmutter' },
+      { type: 'book', text: '"Ultra-Processed People" — Chris van Tulleken' },
+      { type: 'pod',  text: 'Podcast: Precision Nutrition Podcast' },
+      { type: 'web',  text: 'precisionnutrition.com', url: 'https://precisionnutrition.com' },
+    ],
+  },
+  {
+    key: 'nervous_system', name: 'Nervous System',
+    desc: {
+      green:  'Your nervous system appears relatively regulated. This is a foundation for performance, relationships, and health — worth continuing to protect.',
+      yellow: 'Some signs of nervous system activation are present. Your body may be carrying more stress than it is releasing on a daily basis.',
+      red:    'Your nervous system shows signs of chronic activation. A dysregulated stress response is one of the strongest predictors of autoimmune flares, addictive behavior, and relational difficulty. The body cannot heal in a state of constant threat.',
+    },
+    resources: [
+      { type: 'book', text: '"The Body Keeps the Score" — Bessel van der Kolk' },
+      { type: 'book', text: '"Scattered Minds" — Gabor Maté' },
+      { type: 'book', text: '"Why Zebras Don\'t Get Ulcers" — Robert Sapolsky' },
+      { type: 'pod',  text: 'Podcast: Mel Robbins with Gabor Maté' },
+      { type: 'yt',   text: 'YouTube: Nervous System', url: 'https://youtu.be/KPgPcF9-hI0' },
+      { type: 'yt',   text: 'YouTube: Regulation & Healing', url: 'https://youtu.be/Oit3_Cm4WyM' },
+    ],
+  },
+  {
+    key: 'story_identity', name: 'Story & Identity',
+    desc: {
+      green:  'Your early environment appears to have provided a relatively stable foundation for identity and worth.',
+      yellow: 'Some early patterns around worth, performance, or identity may still be influencing how you respond to stress, rest, and relationships today.',
+      red:    'Early environments that tied worth to performance or behavior leave lasting imprints on the nervous system. These formative experiences shape how we respond to failure, rest, and relationship well into adulthood — often below the level of conscious awareness.',
+    },
+    resources: [
+      { type: 'book', text: '"The Wounded Heart" — Dan Allender' },
+      { type: 'book', text: '"Healing the Wounded Heart" — Dan Allender' },
+      { type: 'book', text: '"The Anatomy of the Soul" — Curt Thompson' },
+      { type: 'book', text: '"What Happened to You" — Bruce Perry & Oprah Winfrey' },
+      { type: 'book', text: '"How People Grow" — Cloud & Townsend' },
+      { type: 'pod',  text: 'Podcast: The Allender Center Podcast' },
+      { type: 'pod',  text: 'Podcast: Three Percent Podcast' },
+      { type: 'pod',  text: 'Podcast: The Places We Find Ourselves' },
+      { type: 'web',  text: 'theallendercenter.org', url: 'https://theallendercenter.org' },
+    ],
+  },
+  {
+    key: 'recovery', name: 'Recovery & Rhythm',
+    desc: {
+      green:  'Your lifestyle rhythms appear to be supporting recovery and regulation well. Rest, play, and rhythm are underrated pillars of health.',
+      yellow: 'Some patterns of busyness, guilt around rest, or disconnection from joy detected. These are worth addressing before they compound over time.',
+      red:    'Lifestyle rhythm is one of the most overlooked pillars of health. Chronic busyness, guilt around rest, and disconnection from joy are associated with elevated allostatic load — the cumulative physiological wear from ongoing stress that precedes many chronic illnesses.',
+    },
+    resources: [
+      { type: 'book', text: '"Why Zebras Don\'t Get Ulcers" — Robert Sapolsky' },
+      { type: 'book', text: '"The Ruthless Elimination of Hurry" — John Mark Comer' },
+      { type: 'book', text: '"Rest" — Alex Soojung-Kim Pang' },
+      { type: 'book', text: '"Sabbath" — Wayne Muller' },
+      { type: 'pod',  text: 'Podcast: Mel Robbins with Sara Szal' },
+      { type: 'pod',  text: 'Podcast: The Allender Center Podcast' },
+    ],
+  },
+  {
+    key: 'relational_body', name: 'Relational & Body',
+    desc: {
+      green:  'Your early relational environment appears to have been relatively safe and supportive. Secure early attachment is one of the greatest protective factors for lifelong health.',
+      yellow: 'Some early relational experiences may be influencing present patterns in ways worth exploring with curiosity and care.',
+      red:    'Early relational wounds, enmeshment, and boundary violations — including experiences never named as harm — are among the strongest predictors of somatic illness, body disconnection, and compulsive behavior in adulthood.',
+    },
+    resources: [
+      { type: 'book', text: '"The Wounded Heart" — Dan Allender' },
+      { type: 'book', text: '"Healing the Wounded Heart" — Dan Allender' },
+      { type: 'book', text: '"What Happened to You" — Bruce Perry & Oprah Winfrey' },
+      { type: 'book', text: '"Unwanted" — Jay Stringer' },
+      { type: 'book', text: '"Desire" — Jay Stringer' },
+      { type: 'book', text: '"Outgrow Porn" — Drew Boa' },
+      { type: 'book', text: '"Raising Wise Kids in a Sexually Broken World" — Laurie & Matt Krieg' },
+      { type: 'pod',  text: 'Podcast: The Allender Center Podcast' },
+      { type: 'pod',  text: 'Podcast: The Places We Find Ourselves' },
+      { type: 'pod',  text: 'Podcast: Three Percent Podcast' },
+      { type: 'web',  text: 'theallendercenter.org', url: 'https://theallendercenter.org' },
+      { type: 'yt',   text: 'YouTube: Body & Relationship', url: 'https://youtu.be/KPgPcF9-hI0' },
+      { type: 'yt',   text: 'YouTube: Regulation & Healing', url: 'https://youtu.be/Oit3_Cm4WyM' },
+    ],
+  },
+  {
+    key: 'roots_environment', name: 'Roots & Environment',
+    desc: {
+      green:  'Your formative roots appear to have provided a relatively stable foundation. Cultural identity, faith background, and family history seem to have been supportive rather than sources of significant burden.',
+      yellow: 'Some aspects of your roots — whether cultural, religious, familial, or environmental — may be worth exploring with curiosity. These influences often shape us in ways we don\'t fully see until we look.',
+      red:    'Cultural wounds, religious shame, intergenerational trauma, and toxic environments leave imprints in the body and nervous system that outlast the original experience. These roots are not your fault — but they are worth understanding as part of your story.',
+    },
+    resources: [
+      { type: 'book', text: '"My Grandmother\'s Hands" — Resmaa Menakem' },
+      { type: 'book', text: '"Growing Up Pure" — Lauren D. Sawyer' },
+      { type: 'book', text: '"The Anatomy of the Soul" — Curt Thompson' },
+      { type: 'book', text: '"The Whole-Brain Child" — Dan Siegel' },
+      { type: 'book', text: '"Raising Wise Kids in a Sexually Broken World" — Laurie & Matt Krieg' },
+      { type: 'pod',  text: 'Podcast: The Allender Center Podcast' },
+      { type: 'web',  text: 'theallendercenter.org', url: 'https://theallendercenter.org' },
+    ],
+  },
+];
+
+function renderResults({ storyScore, strainScore, named }) {
   const name = state.firstName || 'friend';
   document.getElementById('results-heading').textContent = `You\u2019re all set, ${name}!`;
 
-  // Two teaser score rows
-  const rows = [
-    { label: 'Story Impact Score',   pct: storyScore  },
-    { label: 'Current Strain Score', pct: strainScore },
+  // Email confirmation notice
+  const emailNotice = document.getElementById('email-notice-text');
+  if (state.email) {
+    emailNotice.textContent = `A copy of your results has also been sent to ${state.email}.`;
+  }
+
+  // Helper: color border hex
+  function colorBorder(c) {
+    return c === 'green' ? '#22C55E' : c === 'yellow' ? '#F59E0B' : '#EF4444';
+  }
+
+  // Helper: interpretation label
+  function interpLabel(c) {
+    return c === 'green' ? 'Low' : c === 'yellow' ? 'Moderate' : 'High';
+  }
+
+  // Overall score boxes
+  const overallRows = [
+    { label: 'Story Impact Score',   score: storyScore },
+    { label: 'Current Strain Score', score: strainScore },
   ];
-  document.getElementById('teaser-scores').innerHTML = rows.map(({ label, pct }) => {
-    const color = getColor(pct);
-    return `<div class="teaser-row">
-      <div class="dot ${color}"></div>
-      <span class="teaser-label">${label}</span>
-      <span class="teaser-pct ${color}">${pct}%</span>
+  document.getElementById('overall-scores').innerHTML = overallRows.map(({ label, score }) => {
+    const c = getColor(score);
+    return `<div class="score-box">
+      <div class="score-val" style="color:${colorBorder(c)}">${score}%</div>
+      <div class="score-name">${label}</div>
+      <div class="score-sub">${interpLabel(c)}</div>
     </div>`;
   }).join('');
+
+  // Resource icon helper
+  function resIconHTML(type) {
+    const map = { book: ['📚','sr-res-book'], pod: ['🎙','sr-res-pod'], yt: ['▶','sr-res-yt'], web: ['🌐','sr-res-web'] };
+    const [icon, cls] = map[type] ?? ['•','sr-res-web'];
+    return `<span class="sr-res-icon ${cls}">${icon}</span>`;
+  }
+
+  // Section cards
+  document.getElementById('full-section-results').innerHTML = RESULTS_SECTIONS.map(sec => {
+    const score = named[sec.key] ?? 0;
+    const c     = getColor(score);
+    const desc  = sec.desc[c];
+
+    let resHTML = '';
+    if (c !== 'green' && sec.resources.length) {
+      const items = sec.resources.map(r => {
+        const content = r.url
+          ? `<a href="${r.url}" target="_blank" rel="noopener">${r.text}</a>`
+          : r.text;
+        return `<div class="sr-res-item">${resIconHTML(r.type)}<span>${content}</span></div>`;
+      }).join('');
+      resHTML = `<div class="sr-resources"><div class="sr-res-label">Recommended Resources</div>${items}</div>`;
+    }
+
+    return `
+      <div class="section-result" style="border-top-color:${colorBorder(c)}">
+        <div class="dot-wrap"><div class="dot ${c}"></div></div>
+        <div class="sr-body">
+          <div class="sr-head">
+            <span class="sr-name">${sec.name}</span>
+            <span class="sr-pct ${c}">${score}%</span>
+          </div>
+          <div class="sr-bar"><div class="sr-fill ${c}" style="width:${score}%"></div></div>
+          <div class="sr-desc">${desc}</div>
+          ${resHTML}
+        </div>
+      </div>`;
+  }).join('');
+
+  // Reflection
+  const reflection = state.reflection?.context;
+  if (reflection) {
+    document.getElementById('reflection-text').textContent = reflection;
+    document.getElementById('reflection-wrap').style.display = 'block';
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
