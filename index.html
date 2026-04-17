@@ -593,8 +593,12 @@
     <div class="card">
       <p>Many people carry symptoms — chronic fatigue, autoimmune conditions, anxiety, addiction, or simply a sense that something is off — without ever understanding why. The HART Assessment helps connect those dots.</p>
       <p>This assessment was designed to give language to the things you have always felt but never been able to make sense of.</p>
-      <p>You will move through 7 areas of your life including physical load, nutrition, nervous system regulation, your formative story, lifestyle rhythms, relational environment, and body history.</p>
+      <p>You will move through 8 areas of your life including physical load, nutrition, nervous system regulation, your formative story, lifestyle rhythms, relational environment, body history, and your roots and environment.</p>
       <p style="margin-bottom:0"><strong>There are no right or wrong answers. Answer as honestly as you can.</strong></p>
+    </div>
+
+    <div style="background:#E6F8F6;border-left:4px solid #4DBFB8;border-radius:12px;padding:1.1rem 1.25rem;margin-bottom:1.25rem;">
+      <p style="font-size:0.92rem;color:#1A3A40;line-height:1.7;margin:0;font-style:italic;">This assessment is not where healing ends — it is where awareness begins. For the first time, you may have language for things you have always felt but never been able to explain.</p>
     </div>
 
     <div class="card">
@@ -650,7 +654,7 @@
     <div class="progress-wrap">
       <div class="progress-meta">
         <div class="progress-title">Getting Started</div>
-        <div class="progress-pct">1 of 9</div>
+        <div class="progress-pct">1 of 10</div>
       </div>
       <div class="progress-track"><div class="progress-bar" style="width:11%"></div></div>
     </div>
@@ -748,7 +752,7 @@
     <div class="progress-wrap">
       <div class="progress-meta">
         <div class="progress-title">Almost Done</div>
-        <div class="progress-pct">9 of 9</div>
+        <div class="progress-pct">10 of 10</div>
       </div>
       <div class="progress-track"><div class="progress-bar" style="width:100%"></div></div>
     </div>
@@ -765,7 +769,7 @@
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-ghost" onclick="goTo('s-section-6')">← Back</button>
+        <button class="btn btn-ghost" onclick="goTo('s-section-7')">← Back</button>
         <button class="btn btn-primary" id="btn-submit" onclick="submitAssessment()">View My Results →</button>
       </div>
     </div>
@@ -920,7 +924,7 @@ const SECTIONS = [
       { q: 'I struggle to truly relax even when nothing urgent is happening.',                                                            scale: 4, reverse: false },
       { q: 'I startle easily or feel hyperaware of what is happening around me.',                                                         scale: 4, reverse: false },
       { q: 'Small frustrations or inconveniences feel disproportionately big in my body.',                                                scale: 4, reverse: false },
-      { q: 'I go numb, zone out, or disconnect when I feel overwhelmed.',                                                                 scale: 4, reverse: false },
+      { q: 'Sometimes when things get to be too much, I find myself checked out, spacing out, or feeling like I\'m on autopilot without meaning to.',                    scale: 4, reverse: false },
       { q: 'I carry tension in my chest, neck, jaw, or shoulders most days.',                                                             scale: 4, reverse: false },
       { q: 'I overthink situations and replay conversations or events long after they have passed.',                                      scale: 4, reverse: false },
       { q: 'I feel a low-level sense of dread or unease even when things are fine.',                                                      scale: 4, reverse: false },
@@ -968,11 +972,11 @@ const SECTIONS = [
       { q: 'How would you describe your overall stress level right now?',                                                                 labels: ['Low', 'Moderate', 'High', 'Very high'], reverse: false },
       { q: 'I feel guilty or restless when I am not being productive.',                                                                   scale: 4, reverse: false },
       { q: 'My sense of being okay depends on staying busy or getting things done.',                                                      scale: 4, reverse: false },
-      { q: 'I scroll, watch things, or stay busy to avoid sitting with my thoughts.',                                                     scale: 4, reverse: false },
+      { q: 'I find myself scrolling, watching things, or keeping busy — and when I stop, I feel unsettled or restless.',                  scale: 4, reverse: false },
       { q: 'I stay up later than I want to because it is the only time I feel like the day is mine.',                                     scale: 4, reverse: false },
       { q: 'My days feel reactive and chaotic rather than intentional.',                                                                  scale: 4, reverse: false },
       { q: 'I rarely make time for things that bring me joy or make me feel like myself.',                                                scale: 4, reverse: false },
-      { q: 'I use busyness or screens to avoid being alone with how I actually feel.',                                                    scale: 4, reverse: false },
+      { q: 'Keeping busy or using screens tends to feel better than sitting in the quiet with nothing to do.',                           scale: 4, reverse: false },
     ],
     research: {
       green:  'Your recovery rhythms appear healthy. Regular rest, play, and intentional breaks allow the nervous system to downregulate and consolidate learning — critical for sustained performance and emotional availability (Loehr & Schwartz, 2003).',
@@ -992,7 +996,7 @@ const SECTIONS = [
       { q: 'The adults in my home were often overwhelmed, absent, or emotionally unavailable.',                                           scale: 5, reverse: false },
       { q: 'I felt pressure to be the strong, mature, or responsible one growing up.',                                                    scale: 5, reverse: false },
       { q: 'My home felt unpredictable, tense, or unsafe at times.',                                                                     scale: 5, reverse: false },
-      { q: 'I learned to read people\'s moods carefully as a way to stay safe.',                                                          scale: 5, reverse: false },
+      { q: 'I notice I am very aware of other people\'s moods and emotional temperature when I walk into a room.',                        scale: 5, reverse: false },
       { q: 'I was afraid of someone\'s anger or emotional reactions growing up.',                                                         scale: 5, reverse: false },
       { q: 'A trusted adult regularly checked in on how I was feeling inside.',                                                           scale: 5, reverse: true  },
       { q: 'I remember feeling like I had to walk on eggshells around someone in my home.',                                               scale: 5, reverse: false },
@@ -1013,6 +1017,43 @@ const SECTIONS = [
     },
   },
   {
+    id: 'roots',
+    title: 'Roots & Environment',
+    icon: '🌿',
+    questions: [
+      // ── Subsection 1: Spiritual & Religious (gating) ──────────────────────
+      {
+        q: 'Did faith, religion, or spirituality play a significant role in your upbringing?',
+        labels: ['Yes, significantly', 'Yes, somewhat', 'Not really', 'No', 'Prefer not to say'],
+        type: 'gate',
+        gateSkipIndices: [2, 3, 4],  // Not really / No / Prefer not to say → skip sub-questions
+        score: false,
+        reverse: false,
+      },
+      { q: 'Growing up, my faith community communicated that my body or sexuality was something to fear, hide, or control.',         scale: 5, reverse: false, conditional: true },
+      { q: 'I learned that my worth or God\'s acceptance depended on my behavior, performance, or purity.',                          scale: 5, reverse: false, conditional: true },
+      { q: 'Religion was used to shame, control, or silence me growing up.',                                                         scale: 5, reverse: false, conditional: true },
+      { q: 'I have complicated feelings about faith, God, or church that I have never fully processed.',                             scale: 5, reverse: false, conditional: true },
+      // ── Subsection 2: Cultural & Identity ─────────────────────────────────
+      { q: 'I grew up feeling like I had to adjust how I talked, acted, or presented myself depending on who I was around — whether at home, at school, in different communities, or between cultures.', scale: 5, reverse: false },
+      { q: 'I grew up feeling proud of where I came from.',                                                                          scale: 5, reverse: true  },
+      { q: 'I felt ashamed or embarrassed of my cultural background, family, or where I grew up.',                                   scale: 5, reverse: false },
+      // ── Subsection 3: Intergenerational ───────────────────────────────────
+      { q: 'There were things in my family that felt heavy or unresolved but were never spoken about openly.',                       scale: 5, reverse: false },
+      { q: 'I sometimes experience emotions — grief, fear, shame, or anger — that feel larger than my own life story explains.',     scale: 5, reverse: false },
+      { q: 'I am aware that people in my family\'s history experienced significant hardship, loss, displacement, or trauma.',        labels: ['Not aware', 'Possibly', 'Yes', 'Definitely'], reverse: false },
+      // ── Subsection 4: Environmental ───────────────────────────────────────
+      { q: 'I have lived in a home or building with a musty smell, water damage, or visible mold.',                                  scale: 5, reverse: false },
+      { q: 'I have been told by doctors that my physical complaints have no clear medical cause.',                                    scale: 5, reverse: false },
+      { q: 'I have wondered whether my environment or surroundings might be contributing to how I feel physically.',                  scale: 5, reverse: false },
+    ],
+    research: {
+      green:  'Your cultural, spiritual, and environmental background appears to have provided a relatively stable foundation.',
+      yellow: 'Some patterns around cultural identity, faith environment, or intergenerational story may be worth exploring further.',
+      red:    'Cultural wounds, religious shame, intergenerational trauma, and environmental stress are among the most overlooked contributors to chronic illness and nervous system dysregulation.',
+    },
+  },
+  {
     id: 'body',
     title: 'Body, Boundaries & Early Sexual Environment',
     icon: '🛡️',
@@ -1024,7 +1065,7 @@ const SECTIONS = [
       { q: 'An adult made me feel responsible for their sexual feelings or behavior.',                                                    scale: 5, reverse: false },
       { q: 'Sex was treated as something shameful, dangerous, or never talked about in my home.',                                         scale: 5, reverse: false },
       { q: 'I have experienced something sexually that I have never fully named as harmful or wrong.',                                    scale: 5, reverse: false },
-      { q: 'I learned to disconnect from my body as a way to feel safe or get through difficult situations.',                             scale: 5, reverse: false },
+      { q: 'There are times when I feel cut off from what is happening in my body, almost like I am watching myself from a distance.',    scale: 5, reverse: false },
       { q: 'I carry shame or deep discomfort when I think about my body.',                                                                scale: 5, reverse: false },
       { q: 'I struggle with pornography use or compulsive sexual behavior.',                                                              scale: 5, reverse: false },
       { q: 'My relationship with my own body feels distant, foreign, or difficult to access.',                                            scale: 5, reverse: false },
@@ -1061,7 +1102,6 @@ const RESOURCE_GROUPS = {
     items: [
       { type: 'book',    title: 'The Autoimmune Cure',   author: 'Sara Szal' },
       { type: 'book',    title: 'When the Body Says No', author: 'Gabor Maté' },
-      { type: 'website', title: 'connercustodio.com',    url: 'https://connercustodio.com' },
     ],
   },
   nervous: {
@@ -1093,7 +1133,6 @@ const RESOURCE_GROUPS = {
     items: [
       { type: 'book',    title: "Why Zebras Don't Get Ulcers", author: 'Robert Sapolsky' },
       { type: 'podcast', title: 'Mel Robbins with Sara Szal' },
-      { type: 'website', title: 'connercustodio.com',           url: 'https://connercustodio.com' },
       { type: 'youtube', title: "Conner's YouTube Channel",     url: 'https://youtube.com/@connercustodio' },
     ],
   },
@@ -1135,7 +1174,7 @@ const state = {
   enneagram: null,
   symptoms: [],
   // answers[sectionIdx][qIdx] = raw value (0-based index into scale)
-  answers: Array.from({ length: 7 }, () => ({})),
+  answers: Array.from({ length: 8 }, () => ({})),
   reflection: {},
   email: '',
 };
@@ -1162,23 +1201,35 @@ document.addEventListener('DOMContentLoaded', () => {
     if (devBuffer.length > 7) devBuffer = devBuffer.slice(-7);
     if (devBuffer === 'test123') {
       devBuffer = '';
-      state.email      = 'conner@connercustodio.com';
+      state.email        = 'conner@connercustodio.com';
       state.demographics = { age: '25–34', sex: 'Male', reason: 'Personal curiosity' };
-      state.symptoms   = ['Chronic fatigue', 'Anxiety or depression'];
-      state.enneagram  = '3';
-      state.reflection = { context: 'Dev test submission — test123 shortcut.' };
+      state.symptoms     = ['Chronic fatigue', 'Anxiety or depression'];
+      state.enneagram    = '3';
+      state.reflection   = { context: 'Dev test submission — test123 shortcut.' };
 
-      const dummy = {
-        storyScore: 74, strainScore: 52,
-        sectionScores: [68, 45, 71, 74, 38, 55, 62],
-        named: { physical: 68, nutrition: 45, nervous_system: 71, story_identity: 74, recovery: 38, relational_body: Math.round((55 + 62) / 2) },
-      };
-      renderResults(dummy);
+      // Fill all section answers with mid-range dummy values so Formspree
+      // research fields are populated and scores are computed from real logic.
+      SECTIONS.forEach((sec, si) => {
+        sec.questions.forEach((q, qi) => {
+          if (q.type === 'gate') {
+            // "Yes, significantly" (index 0) — keeps conditional questions active
+            state.answers[si][qi] = 0;
+          } else {
+            const numOpts = q.labels ? q.labels.length : (q.scale || 4);
+            // Reverse questions (healthy behavior): pick a low-strain answer
+            // Strain questions: pick ~60% through the scale
+            state.answers[si][qi] = q.reverse ? 1 : Math.floor(numOpts * 0.6);
+          }
+        });
+      });
+
+      const scores = computeScores();
+      renderResults(scores);
       goTo('s-results');
 
       // Submit to Formspree so the webhook fires
-      const dummyUrl = buildResultsUrl(dummy);
-      submitFormspree(state.email, dummy, dummyUrl)
+      const resultsUrl = buildResultsUrl(scores);
+      submitFormspree(state.email, scores, resultsUrl)
         .then(() => showToast('✓ Test submission sent to Formspree'))
         .catch(() => showToast('Formspree submission failed — check console'));
     }
@@ -1219,9 +1270,9 @@ function buildSectionScreens() {
 
   SECTIONS.forEach((sec, si) => {
     const prevId = si === 0 ? 's-demographics' : `s-section-${si - 1}`;
-    const nextId = si === 6 ? 's-reflection' : `s-section-${si + 1}`;
-    const step = si + 2; // steps 2–8
-    const pct = Math.round(step / 9 * 100);
+    const nextId = si === 7 ? 's-reflection' : `s-section-${si + 1}`;
+    const step = si + 2; // steps 2–9
+    const pct = Math.round(step / 10 * 100);
 
     const div = document.createElement('div');
     div.className = 'screen';
@@ -1232,41 +1283,69 @@ function buildSectionScreens() {
       ? `<div style="background:#E8F6F5;border-left:3px solid #4DBFB8;border-radius:8px;padding:0.85rem 1rem;font-size:0.82rem;color:#1A2E35;margin-bottom:1.25rem;line-height:1.6;">${sec.note}</div>`
       : '';
 
-    let qHtml = '';
-    sec.questions.forEach((q, qi) => {
-      // Resolve labels: custom array > scale 5 > scale 4 (default)
+    // Build question parts, handling gate + conditional blocks
+    const qParts = sec.questions.map((q, qi) => {
       const labels = q.labels || (q.scale === 5 ? SCALE_5 : SCALE_4);
       const globalQ = qOffsets[si] + qi + 1;
-      let optHtml = labels.map((lbl, vi) => `
-        <label class="scale-opt" onclick="recordAnswer(${si},${qi},${vi})">
+      const onclick = q.type === 'gate'
+        ? (vi) => `recordAnswer(${si},${qi},${vi}); toggleFaithConditional(${si},${vi})`
+        : (vi) => `recordAnswer(${si},${qi},${vi})`;
+
+      const optHtml = labels.map((lbl, vi) => `
+        <label class="scale-opt" onclick="${onclick(vi)}">
           <input type="radio" name="q-${si}-${qi}" value="${vi}">
           <div class="scale-circle"></div>
           <span class="scale-lbl">${lbl}</span>
         </label>`).join('');
 
-      qHtml += `
+      return {
+        conditional: !!q.conditional,
+        html: `
         <div class="q-block" id="qb-${si}-${qi}">
           <div class="q-meta"><span class="q-num">Q${globalQ}</span></div>
           <div class="q-text">${q.q}</div>
           <div class="scale-row">${optHtml}</div>
-        </div>`;
+        </div>`,
+      };
     });
+
+    // Assemble qHtml, wrapping consecutive conditional questions in a toggleable div
+    let qHtml = '';
+    let i = 0;
+    while (i < qParts.length) {
+      if (!qParts[i].conditional && qParts[i + 1] && qParts[i + 1].conditional) {
+        qHtml += qParts[i].html;
+        qHtml += `<div id="faith-cond-${si}" style="display:none;">`;
+        i++;
+        while (i < qParts.length && qParts[i].conditional) {
+          qHtml += qParts[i].html;
+          i++;
+        }
+        qHtml += `</div>`;
+      } else {
+        qHtml += qParts[i].html;
+        i++;
+      }
+    }
 
     div.innerHTML = `
       <div class="site-header">
         <div class="logo">HART <span>Assessment</span></div>
-        <div class="step-label">${step} of 9</div>
+        <div class="step-label">${step} of 10</div>
+      </div>
+      <div style="background:#FFFBEB;border-bottom:2px solid #F59E0B;padding:0.6rem 1.5rem;font-size:0.78rem;font-weight:600;color:#92400E;text-align:center;">
+        ⚠ Please note: your progress will not be saved if you close or refresh this page. Complete the assessment in one sitting.
       </div>
       <div class="page-wrap">
         <div class="progress-wrap">
           <div class="progress-meta">
             <div class="progress-title">${sec.icon} ${sec.title}</div>
-            <div class="progress-pct">${step} of 9</div>
+            <div class="progress-pct">${step} of 10</div>
           </div>
           <div class="progress-track"><div class="progress-bar" style="width:${pct}%"></div></div>
         </div>
         <div class="card">
-          <div class="section-badge">Section ${si + 1} of 7</div>
+          <div class="section-badge">Section ${si + 1} of 8</div>
           <h2>${sec.title}</h2>
           <p>Answer based on your experience over the <strong>past 30 days</strong>. There are no right or wrong answers.</p>
           <div class="divider"></div>
@@ -1293,6 +1372,49 @@ function goTo(screenId) {
     target.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+  // Restore gate-conditional visibility when navigating back to a section
+  if (screenId.startsWith('s-section-')) {
+    const si = parseInt(screenId.replace('s-section-', ''), 10);
+    restoreFaithConditional(si);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FAITH GATE LOGIC
+   ═══════════════════════════════════════════════════════════════ */
+function toggleFaithConditional(si, vi) {
+  const block = document.getElementById(`faith-cond-${si}`);
+  if (!block) return;
+  const sec = SECTIONS[si];
+  const gateQ = sec.questions.find(q => q.type === 'gate');
+  if (!gateQ) return;
+  const shouldShow = !(gateQ.gateSkipIndices || []).includes(vi);
+  block.style.display = shouldShow ? 'block' : 'none';
+  // When hiding, clear answers for conditional questions so they don't affect score
+  if (!shouldShow) {
+    sec.questions.forEach((q, qi) => {
+      if (!q.conditional) return;
+      delete state.answers[si][qi];
+      const checked = document.querySelector(`input[name="q-${si}-${qi}"]:checked`);
+      if (checked) checked.checked = false;
+      const qBlock = document.getElementById(`qb-${si}-${qi}`);
+      if (qBlock) qBlock.classList.remove('unanswered');
+    });
+  }
+}
+
+function restoreFaithConditional(si) {
+  if (!SECTIONS[si]) return;
+  const sec = SECTIONS[si];
+  const gateIdx = sec.questions.findIndex(q => q.type === 'gate');
+  if (gateIdx < 0) return;
+  const block = document.getElementById(`faith-cond-${si}`);
+  if (!block) return;
+  const gateVal = state.answers[si]?.[gateIdx];
+  if (gateVal === undefined) return;
+  const gateQ = sec.questions[gateIdx];
+  const skipIndices = gateQ.gateSkipIndices || [];
+  block.style.display = skipIndices.includes(gateVal) ? 'none' : 'block';
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1351,9 +1473,16 @@ function recordAnswer(si, qi, val) {
 }
 
 function submitSection(si, nextId) {
-  const numQ = SECTIONS[si].questions.length;
+  const sec = SECTIONS[si];
+  const numQ = sec.questions.length;
+  const gateIdx = sec.questions.findIndex(q => q.type === 'gate');
+  const gateVal = gateIdx >= 0 ? (state.answers[si]?.[gateIdx] ?? null) : null;
+  const gateSkip = gateIdx >= 0 ? (sec.questions[gateIdx].gateSkipIndices || []) : [];
+  const skipConditionals = gateVal !== null && gateSkip.includes(gateVal);
+
   const missing = [];
   for (let qi = 0; qi < numQ; qi++) {
+    if (skipConditionals && sec.questions[qi].conditional) continue;
     if (state.answers[si][qi] === undefined) missing.push(qi);
   }
   const warn = document.getElementById(`warn-${si}`);
@@ -1456,16 +1585,19 @@ function submitFormspree(email, { storyScore, strainScore, sectionScores, named 
       q_felt_like_therapist:       getAnswerLabel(5, 18), // "I felt more like a friend, therapist, or emotional partner to a parent."
       q_responsible_for_parent:    getAnswerLabel(5, 19), // "I felt responsible for a parent's happiness, mood, or emotional state."
 
+      // ── Roots & environment (section 6 — new) ────────────────
+      faith_background: getAnswerLabel(6, 0), // "Did faith, religion, or spirituality play a significant role…"
+
       // ── Body & sexual environment (section 7 — body) ─────────
-      q_body_commented_on:              getAnswerLabel(6,  0), // "My body was commented on, criticized, or sexualized…"
-      q_exposed_sexual_content:         getAnswerLabel(6,  1), // "Before age 18, exposed to sexual content…"
-      q_felt_violating:                 getAnswerLabel(6,  2), // "Someone touched, looked, or spoke in a way that felt violating…"
-      q_responsible_for_adult_feelings: getAnswerLabel(6,  3), // "An adult made me feel responsible for their sexual feelings…"
-      q_sex_shameful:                   getAnswerLabel(6,  4), // "Sex was treated as shameful or never talked about…"
-      q_unnamed_harm:                   getAnswerLabel(6,  5), // "Experienced something sexually never fully named as harmful…"
-      q_body_disconnect:                getAnswerLabel(6,  6), // "I learned to disconnect from my body to feel safe…"
-      q_body_shame:                     getAnswerLabel(6,  7), // "I carry shame or discomfort about my body."
-      q_pornography_struggle:           getAnswerLabel(6,  8), // "I struggle with pornography or compulsive sexual behavior."
+      q_body_commented_on:              getAnswerLabel(7,  0), // "My body was commented on, criticized, or sexualized…"
+      q_exposed_sexual_content:         getAnswerLabel(7,  1), // "Before age 18, exposed to sexual content…"
+      q_felt_violating:                 getAnswerLabel(7,  2), // "Someone touched, looked, or spoke in a way that felt violating…"
+      q_responsible_for_adult_feelings: getAnswerLabel(7,  3), // "An adult made me feel responsible for their sexual feelings…"
+      q_sex_shameful:                   getAnswerLabel(7,  4), // "Sex was treated as shameful or never talked about…"
+      q_unnamed_harm:                   getAnswerLabel(7,  5), // "Experienced something sexually never fully named as harmful…"
+      q_body_disconnect:                getAnswerLabel(7,  6), // "There are times I feel cut off from my body…"
+      q_body_shame:                     getAnswerLabel(7,  7), // "I carry shame or discomfort about my body."
+      q_pornography_struggle:           getAnswerLabel(7,  8), // "I struggle with pornography or compulsive sexual behavior."
 
       // ── Scores ──────────────────────────────────────────────
       story_impact_score:           storyScore  + '%',
@@ -1476,7 +1608,8 @@ function submitFormspree(email, { storyScore, strainScore, sectionScores, named 
       story_identity_score:         sectionScores[3] + '%',
       recovery_rhythm_score:        sectionScores[4] + '%',
       relational_environment_score: sectionScores[5] + '%',
-      body_boundaries_score:        sectionScores[6] + '%',
+      roots_environment_score:      sectionScores[6] + '%',
+      body_boundaries_score:        sectionScores[7] + '%',
 
       // ── Reflection ──────────────────────────────────────────
       final_reflection: state.reflection.context || '',
@@ -1489,36 +1622,47 @@ function submitFormspree(email, { storyScore, strainScore, sectionScores, named 
    ═══════════════════════════════════════════════════════════════ */
 // Returns a normalised strain value 0–100 for a section.
 // Each item is normalised to 0–1 (higher = more strain), then averaged.
+// Gate questions (score:false) are excluded; conditional questions are excluded
+// when the gate answer indicates skipping.
 function scoreSection(si) {
   const sec = SECTIONS[si];
-  let total = 0;
+  const gateIdx = sec.questions.findIndex(q => q.type === 'gate');
+  const gateVal = gateIdx >= 0 ? (state.answers[si]?.[gateIdx] ?? null) : null;
+  const gateSkip = gateIdx >= 0 ? (sec.questions[gateIdx].gateSkipIndices || []) : [];
+  const skipConditionals = gateVal !== null && gateSkip.includes(gateVal);
+
+  let total = 0, count = 0;
   sec.questions.forEach((q, qi) => {
-    const raw = state.answers[si][qi] ?? 0; // 0-based index into label array
-    // Derive max from custom labels array if present, else from scale
+    if (q.score === false) return;                    // gate question not scored
+    if (q.conditional && skipConditionals) return;   // faith skipped
+
+    const raw = state.answers[si][qi] ?? 0;
     const numOpts = q.labels ? q.labels.length : q.scale;
     const max = numOpts - 1;
-    let norm = max > 0 ? raw / max : 0; // 0–1
+    let norm = max > 0 ? raw / max : 0;
     if (q.reverse) norm = 1 - norm;
     total += norm;
+    count++;
   });
-  return Math.round((total / sec.questions.length) * 100);
+  return count > 0 ? Math.round((total / count) * 100) : 0;
 }
 
 function computeScores() {
   const sectionScores = SECTIONS.map((_, si) => scoreSection(si));
-  // Story Impact Score = section 3 (Story & Identity)
-  const storyScore = sectionScores[3];
-  // Current Strain = mean of the 6 non-story sections
-  const strainSections = [0, 1, 2, 4, 5, 6];
+  // Story Impact Score = average of Story & Identity (3) + Roots & Environment (6)
+  const storyScore = Math.round((sectionScores[3] + sectionScores[6]) / 2);
+  // Current Strain = mean of 6 non-story sections (body is now index 7)
+  const strainSections = [0, 1, 2, 4, 5, 7];
   const strainScore = Math.round(strainSections.reduce((s, i) => s + sectionScores[i], 0) / 6);
-  // Named scores for results URL (relational + body averaged into one)
+  // Named scores for results URL (relational[5] + body[7] averaged into one)
   const named = {
-    physical:        sectionScores[0],
-    nutrition:       sectionScores[1],
-    nervous_system:  sectionScores[2],
-    story_identity:  sectionScores[3],
-    recovery:        sectionScores[4],
-    relational_body: Math.round((sectionScores[5] + sectionScores[6]) / 2),
+    physical:           sectionScores[0],
+    nutrition:          sectionScores[1],
+    nervous_system:     sectionScores[2],
+    story_identity:     sectionScores[3],
+    recovery:           sectionScores[4],
+    relational_body:    Math.round((sectionScores[5] + sectionScores[7]) / 2),
+    roots_environment:  sectionScores[6],
   };
   return { storyScore, strainScore, sectionScores, named };
 }
@@ -1526,16 +1670,17 @@ function computeScores() {
 function buildResultsUrl({ storyScore, strainScore, named }) {
   const base = 'https://connercustodio.github.io/Hart-Assessment/results.html';
   const p = new URLSearchParams({
-    email:           state.email,
-    story_impact:    storyScore,
-    current_strain:  strainScore,
-    physical:        named.physical,
-    nutrition:       named.nutrition,
-    nervous_system:  named.nervous_system,
-    story_identity:  named.story_identity,
-    recovery:        named.recovery,
-    relational_body: named.relational_body,
-    reflection:      state.reflection.context || '',
+    email:              state.email,
+    story_impact:       storyScore,
+    current_strain:     strainScore,
+    physical:           named.physical,
+    nutrition:          named.nutrition,
+    nervous_system:     named.nervous_system,
+    story_identity:     named.story_identity,
+    recovery:           named.recovery,
+    relational_body:    named.relational_body,
+    roots_environment:  named.roots_environment,
+    reflection:         state.reflection.context || '',
   });
   return `${base}?${p.toString()}`;
 }
@@ -1733,7 +1878,7 @@ function retake() {
   state.demographics = {};
   state.enneagram = null;
   state.symptoms = [];
-  state.answers = Array.from({ length: 7 }, () => ({}));
+  state.answers = Array.from({ length: 8 }, () => ({}));
   state.reflection = {};
   state.email = '';
 

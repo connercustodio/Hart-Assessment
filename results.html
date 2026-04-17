@@ -420,6 +420,55 @@
     .bg-yellow-pill { background: var(--yellow-bg); color: var(--yellow); }
     .bg-red-pill    { background: var(--red-bg);    color: var(--red); }
     .bg-teal-pill   { background: rgba(77,191,184,0.12); color: var(--teal-deep); }
+
+    /* ── Score key ── */
+    .score-key {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 24px 28px 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 8px;
+    }
+    .score-key-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--teal-deep);
+      margin-bottom: 14px;
+    }
+    .score-key-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 28px;
+    }
+    .score-key-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.83rem;
+      color: var(--text-soft);
+      line-height: 1.4;
+    }
+    .key-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .key-dot-green  { background: var(--green); }
+    .key-dot-yellow { background: var(--yellow); }
+    .key-dot-red    { background: var(--red); }
+    .key-label { font-weight: 700; color: var(--text); }
+    .score-key-note {
+      margin-top: 14px;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      font-style: italic;
+      border-top: 1px solid #E6F5F4;
+      padding-top: 12px;
+      line-height: 1.55;
+    }
   </style>
 </head>
 <body>
@@ -429,17 +478,23 @@
 const params   = new URLSearchParams(window.location.search);
 const isTest   = ![...params.keys()].length;
 
+function safeInt(val, def) {
+  const n = parseInt(val, 10);
+  return isNaN(n) ? def : Math.max(0, Math.min(100, n));
+}
+
 const D = {
   email:           params.get('email')           ?? 'preview@example.com',
-  story_impact:    Number(params.get('story_impact')    ?? 72),
-  current_strain:  Number(params.get('current_strain')  ?? 68),
-  physical:        Number(params.get('physical')        ?? 61),
-  nutrition:       Number(params.get('nutrition')       ?? 44),
-  nervous_system:  Number(params.get('nervous_system')  ?? 78),
-  story_identity:  Number(params.get('story_identity')  ?? 55),
-  recovery:        Number(params.get('recovery')        ?? 38),
-  relational_body: Number(params.get('relational_body') ?? 82),
-  reflection:      params.get('reflection')      ?? 'I noticed how much I carry without realizing it. A lot of this has been under the surface for years and I am just now starting to name it.'
+  story_impact:    safeInt(params.get('story_impact'),    isTest ? 72 : 0),
+  current_strain:  safeInt(params.get('current_strain'),  isTest ? 68 : 0),
+  physical:        safeInt(params.get('physical'),        isTest ? 61 : 0),
+  nutrition:       safeInt(params.get('nutrition'),       isTest ? 44 : 0),
+  nervous_system:  safeInt(params.get('nervous_system'),  isTest ? 78 : 0),
+  story_identity:  safeInt(params.get('story_identity'),  isTest ? 55 : 0),
+  recovery:        safeInt(params.get('recovery'),        isTest ? 38 : 0),
+  relational_body:     safeInt(params.get('relational_body'),     isTest ? 82 : 0),
+  roots_environment:   safeInt(params.get('roots_environment'),   isTest ? 58 : 0),
+  reflection:          params.get('reflection')      ?? 'I noticed how much I carry without realizing it. A lot of this has been under the surface for years and I am just now starting to name it.'
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -454,9 +509,9 @@ function colorHex(v) {
   return 'var(--red)';
 }
 function interpretation(v) {
-  if (v < 35)  return ['Low',       'bg-green-pill',  'You\'re showing healthy patterns in this area. Keep protecting what\'s working.'];
-  if (v < 65)  return ['Moderate',  'bg-yellow-pill', 'There are signs of accumulating pressure here. Worth paying attention to.'];
-  if (v < 85)  return ['High',      'bg-red-pill',    'This area is showing clear signs of strain. Prioritizing recovery here matters.'];
+  if (v <  35) return ['Low',       'bg-green-pill',  'You\'re showing healthy patterns in this area. Keep protecting what\'s working.'];
+  if (v <= 65) return ['Moderate',  'bg-yellow-pill', 'There are signs of accumulating pressure here. Worth paying attention to.'];
+  if (v <= 80) return ['High',      'bg-red-pill',    'This area is showing clear signs of strain. Prioritizing recovery here matters.'];
   return              ['Very High', 'bg-red-pill',    'This area is under significant stress and deserves focused, compassionate attention.'];
 }
 
@@ -478,70 +533,119 @@ const sections = [
   {
     key: 'physical',
     name: 'Physical Load & Sleep',
-    desc: 'Your body is carrying a measurable recovery deficit. Research consistently links chronic physical overextension and poor sleep to elevated cortisol, systemic inflammation, and increased vulnerability to autoimmune conditions.',
+    desc: {
+      green:  'Your body appears to be getting adequate rest and recovery. Sleep and physical rhythm are foundational — keep protecting them.',
+      yellow: 'Some signs of physical strain or inconsistent recovery are present. Your body may be carrying more than it is releasing.',
+      red:    'Your body is carrying a measurable recovery deficit. Research consistently links chronic physical overextension and poor sleep to elevated cortisol, systemic inflammation, and increased vulnerability to autoimmune conditions.',
+    },
     resources: [
+      { type: 'book', text: '"The Body Keeps the Score" — Bessel van der Kolk' },
       { type: 'book', text: '"When the Body Says No" — Gabor Maté' },
       { type: 'book', text: '"Why Zebras Don\'t Get Ulcers" — Robert Sapolsky' },
-      { type: 'book', text: '"Healing Back Pain" — John Sarno' },
-      { type: 'yt',   text: 'YouTube: Conner Custodio', url: 'https://youtube.com/@connercustodio' },
     ]
   },
   {
     key: 'nutrition',
     name: 'Nutrition & Fuel',
-    desc: 'Chronic underfueling — especially inadequate carbohydrates and water — keeps the body locked in a sympathetic survival state. When glucose is unavailable, the nervous system treats this as a threat, triggering hormonal dysregulation and immune suppression.',
+    desc: {
+      green:  'Your fueling patterns appear to be supporting your body well. Consistent nutrition is one of the most powerful regulators of mood, energy, and immune function.',
+      yellow: 'Some inconsistency in fueling patterns detected. Your nervous system is highly sensitive to when and what you eat — small changes here can have big effects.',
+      red:    'Chronic underfueling — especially inadequate carbohydrates and water — keeps the body locked in a sympathetic survival state. When glucose is unavailable, the nervous system treats this as a threat, triggering hormonal dysregulation and immune suppression.',
+    },
     resources: [
       { type: 'book', text: '"The Autoimmune Cure" — Sara Szal' },
       { type: 'book', text: '"When the Body Says No" — Gabor Maté' },
-      { type: 'web',  text: 'connercustodio.com', url: 'https://connercustodio.com' },
     ]
   },
   {
     key: 'nervous_system',
     name: 'Nervous System',
-    desc: 'Your nervous system shows signs of chronic activation. A dysregulated stress response is one of the strongest predictors of autoimmune flares, addictive behavior, and relational difficulty. The body cannot heal in a state of constant threat.',
+    desc: {
+      green:  'Your nervous system appears relatively regulated. This is a foundation for performance, relationships, and health — worth continuing to protect.',
+      yellow: 'Some signs of nervous system activation are present. Your body may be carrying more stress than it is releasing on a daily basis.',
+      red:    'Your nervous system shows signs of chronic activation. A dysregulated stress response is one of the strongest predictors of autoimmune flares, addictive behavior, and relational difficulty. The body cannot heal in a state of constant threat.',
+    },
     resources: [
       { type: 'book', text: '"The Body Keeps the Score" — Bessel van der Kolk' },
       { type: 'book', text: '"Scattered Minds" — Gabor Maté' },
+      { type: 'book', text: '"Why Zebras Don\'t Get Ulcers" — Robert Sapolsky' },
       { type: 'pod',  text: 'Podcast: Mel Robbins with Gabor Maté' },
-      { type: 'yt',   text: 'YouTube: Nervous System Explained', url: 'https://youtu.be/KPgPcF9-hI0' },
+      { type: 'yt',   text: 'YouTube: Nervous System', url: 'https://youtu.be/KPgPcF9-hI0' },
       { type: 'yt',   text: 'YouTube: Regulation & Healing', url: 'https://youtu.be/Oit3_Cm4WyM' },
     ]
   },
   {
     key: 'story_identity',
     name: 'Story & Identity',
-    desc: 'Early environments that tied worth to performance or behavior leave lasting imprints on the nervous system. These formative experiences shape how we respond to failure, rest, and relationship well into adulthood — often below the level of conscious awareness.',
+    desc: {
+      green:  'Your early environment appears to have provided a relatively stable foundation for identity and worth.',
+      yellow: 'Some early patterns around worth, performance, or identity may still be influencing how you respond to stress, rest, and relationships today.',
+      red:    'Early environments that tied worth to performance or behavior leave lasting imprints on the nervous system. These formative experiences shape how we respond to failure, rest, and relationship well into adulthood — often below the level of conscious awareness.',
+    },
     resources: [
       { type: 'book', text: '"The Wounded Heart" — Dan Allender' },
-      { type: 'book', text: '"What Happened to You" — Bruce Perry & Oprah' },
+      { type: 'book', text: '"Healing the Wounded Heart" — Dan Allender' },
+      { type: 'book', text: '"What Happened to You" — Bruce Perry & Oprah Winfrey' },
       { type: 'book', text: '"How People Grow" — Cloud & Townsend' },
       { type: 'pod',  text: 'Podcast: The Allender Center Podcast' },
-      { type: 'pod',  text: 'Podcast: Three Percent' },
+      { type: 'pod',  text: 'Podcast: Three Percent Podcast' },
+      { type: 'pod',  text: 'Podcast: The Places We Find Ourselves' },
       { type: 'web',  text: 'theallendercenter.org', url: 'https://theallendercenter.org' },
     ]
   },
   {
     key: 'recovery',
     name: 'Recovery & Rhythm',
-    desc: 'Lifestyle rhythm is one of the most overlooked pillars of health. Chronic busyness, guilt around rest, and disconnection from joy are associated with elevated allostatic load — the cumulative physiological wear from ongoing stress.',
+    desc: {
+      green:  'Your lifestyle rhythms appear to be supporting recovery and regulation well. Rest, play, and rhythm are underrated pillars of health.',
+      yellow: 'Some patterns of busyness, guilt around rest, or disconnection from joy detected. These are worth addressing before they compound over time.',
+      red:    'Lifestyle rhythm is one of the most overlooked pillars of health. Chronic busyness, guilt around rest, and disconnection from joy are associated with elevated allostatic load — the cumulative physiological wear from ongoing stress that precedes many chronic illnesses.',
+    },
     resources: [
       { type: 'book', text: '"Why Zebras Don\'t Get Ulcers" — Robert Sapolsky' },
       { type: 'pod',  text: 'Podcast: Mel Robbins with Sara Szal' },
-      { type: 'web',  text: 'connercustodio.com', url: 'https://connercustodio.com' },
     ]
   },
   {
     key: 'relational_body',
     name: 'Relational & Body',
-    desc: 'Early relational wounds, enmeshment, and boundary violations — including experiences never named as harm — are among the strongest predictors of somatic illness, body disconnection, and compulsive behavior in adulthood.',
+    desc: {
+      green:  'Your early relational environment appears to have been relatively safe and supportive. Secure early attachment is one of the greatest protective factors for lifelong health.',
+      yellow: 'Some early relational experiences may be influencing present patterns in ways worth exploring with curiosity and care.',
+      red:    'Early relational wounds, enmeshment, and boundary violations — including experiences never named as harm — are among the strongest predictors of somatic illness, body disconnection, and compulsive behavior in adulthood.',
+    },
     resources: [
+      { type: 'book', text: '"The Wounded Heart" — Dan Allender' },
+      { type: 'book', text: '"Healing the Wounded Heart" — Dan Allender' },
+      { type: 'book', text: '"What Happened to You" — Bruce Perry & Oprah Winfrey' },
       { type: 'book', text: '"Unwanted" — Jay Stringer' },
       { type: 'book', text: '"Desire" — Jay Stringer' },
-      { type: 'book', text: '"The Wounded Heart" — Dan Allender' },
+      { type: 'book', text: '"Outgrow Porn" — Drew Boa' },
+      { type: 'book', text: '"Raising Wise Kids in a Sexually Broken World" — Laurie & Matt Krieg' },
       { type: 'pod',  text: 'Podcast: The Allender Center Podcast' },
       { type: 'pod',  text: 'Podcast: The Places We Find Ourselves' },
+      { type: 'pod',  text: 'Podcast: Three Percent Podcast' },
+      { type: 'web',  text: 'theallendercenter.org', url: 'https://theallendercenter.org' },
       { type: 'yt',   text: 'YouTube: Body & Relationship', url: 'https://youtu.be/KPgPcF9-hI0' },
+      { type: 'yt',   text: 'YouTube: Regulation & Healing', url: 'https://youtu.be/Oit3_Cm4WyM' },
+    ]
+  },
+  {
+    key: 'roots_environment',
+    name: 'Roots & Environment',
+    desc: {
+      green:  'Your formative roots appear to have provided a relatively stable foundation. Cultural identity, faith background, and family history seem to have been supportive rather than sources of significant burden.',
+      yellow: 'Some aspects of your roots — whether cultural, religious, familial, or environmental — may be worth exploring with curiosity. These influences often shape us in ways we don\'t fully see until we look.',
+      red:    'Cultural wounds, religious shame, intergenerational trauma, and toxic environments leave imprints in the body and nervous system that outlast the original experience. These roots are not your fault — but they are worth understanding as part of your story.',
+    },
+    resources: [
+      { type: 'book', text: '"My Grandmother\'s Hands" — Resmaa Menakem' },
+      { type: 'book', text: '"Growing Up Pure" — Lauren D. Sawyer' },
+      { type: 'book', text: '"The Anatomy of the Soul" — Curt Thompson' },
+      { type: 'book', text: '"The Whole-Brain Child" — Dan Siegel' },
+      { type: 'book', text: '"Raising Wise Kids in a Sexually Broken World" — Laurie & Matt Krieg' },
+      { type: 'pod',  text: 'Podcast: The Allender Center Podcast' },
+      { type: 'web',  text: 'theallendercenter.org', url: 'https://theallendercenter.org' },
     ]
   }
 ];
@@ -602,7 +706,7 @@ function renderSectionCard(sec) {
       <div class="bar-track">
         <div class="bar-fill" style="width:${score}%; background:${hex};"></div>
       </div>
-      <p class="sec-desc">${sec.desc}</p>
+      <p class="sec-desc">${sec.desc[cc]}</p>
       ${resHTML}
     </div>`;
 }
@@ -678,9 +782,28 @@ document.addEventListener('DOMContentLoaded', () => {
   <p class="section-label">Overall Scores</p>
   <div id="big-scores" class="score-pair"></div>
 
-  <!-- Section scores -->
+  <!-- Score key -->
   <p class="section-label">Section Breakdown</p>
-  <div id="section-grid" class="section-grid"></div>
+  <div class="score-key">
+    <div class="score-key-title">Understanding your scores</div>
+    <div class="score-key-items">
+      <div class="score-key-item">
+        <span class="key-dot key-dot-green"></span>
+        <span><span class="key-label">Low</span> (under 35%) — This area appears stable and supported</span>
+      </div>
+      <div class="score-key-item">
+        <span class="key-dot key-dot-yellow"></span>
+        <span><span class="key-label">Moderate</span> (35–65%) — This area may benefit from attention</span>
+      </div>
+      <div class="score-key-item">
+        <span class="key-dot key-dot-red"></span>
+        <span><span class="key-label">High</span> (over 65%) — This area is carrying significant load</span>
+      </div>
+    </div>
+    <p class="score-key-note">Resources are provided for areas scoring moderate or high to help you explore further.</p>
+  </div>
+
+  <div id="section-grid" class="section-grid" style="margin-top:20px;"></div>
 
   <!-- Reflection -->
   <div id="reflection-wrap" class="reflection-wrap">
